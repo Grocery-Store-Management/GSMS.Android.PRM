@@ -1,5 +1,6 @@
 package com.prm.gsms.activities.customer;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -12,10 +13,12 @@ import android.widget.BaseAdapter;
 
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
 import com.prm.gsms.R;
 import com.prm.gsms.dtos.Customer;
 import com.prm.gsms.services.CustomerService;
 import com.prm.gsms.utils.GsmsUtils;
+import com.prm.gsms.utils.VolleyCallback;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -48,7 +51,13 @@ public class CustomerPreferenceActivity extends PreferenceActivity
             while ((s = br.readLine()) != null) {
                 customerId = s;
             }
-            if (customerId != null) curCustomer = CustomerService.getCustomerInfoById(customerId);
+            if (customerId != null)
+                GsmsUtils.apiUtils(this, Request.Method.GET,"customers/" + customerId, new VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        curCustomer = CustomerService.getCustomerInfoById(result);
+                    }
+                });
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -76,7 +85,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
             edtId.setSummary(curCustomer.getId());
             edtPassword.setSummary(curCustomer.getPassword());
             edtPhone.setSummary(curCustomer.getPhoneNumber());
-            
+
         } else {
             for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
                 initData(getPreferenceScreen().getPreference(i), sharedPrefs);

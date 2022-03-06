@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.prm.gsms.R;
 import com.prm.gsms.adapters.ImportOrderAdapter;
 import com.prm.gsms.dtos.ImportOrder;
+import com.prm.gsms.services.ImportOrderService;
 import com.prm.gsms.utils.GsmsUtils;
 
 import java.lang.reflect.Type;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.prm.gsms.R;
+import com.prm.gsms.utils.VolleyCallback;
 
 public class ImportOrderListActivity extends AppCompatActivity {
 
@@ -43,55 +45,24 @@ public class ImportOrderListActivity extends AppCompatActivity {
         loadImportOrderList();
 
     }
+    private static List<ImportOrder> importOrders = null;
 
     private void loadImportOrderList(){
         importOderListView = (ListView) findViewById(R.id.importOrderList);
         importOrderAdapter = new ImportOrderAdapter();
 
         TextView txtCountIO = (TextView) findViewById(R.id.txtCountIO);
-
         try {
-
-
             RequestQueue queue = Volley.newRequestQueue(this);
-            String apiUrl = getResources().getString(R.string.apiUrl) + "/import-orders";
-            StringRequest stringRequest = new StringRequest(
-                    Request.Method.GET,
-                    apiUrl,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-
-                            Gson gson = GsmsUtils.createGson();
-                            List<ImportOrder> importOrders = new ArrayList<>();
-                            Type type = new TypeToken<ArrayList<ImportOrder>>(){}.getType();
-                            importOrders = gson.fromJson(response, type);
-
-                            txtCountIO.setText(importOrders.size() + "");
-                            importOrderAdapter.setImportOrderList(importOrders);
-                            importOderListView.setAdapter(importOrderAdapter);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            txtCountIO.setText("Failed!!");
-                        }
-                    }
-            ) {
+            GsmsUtils.apiUtils(this, Request.Method.GET,  "import-orders" , new VolleyCallback() {
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("User-Agent", "GSMS-app");
-                    headers.put("Authorization", "Bearer " + getResources().getString(R.string.bearer));
-
-                    return headers;
+                public void onSuccess(String result) {
+                    importOrders = ImportOrderService.getImportOrders(result);
+                    txtCountIO.setText(importOrders.size() + "");
+                    importOrderAdapter.setImportOrderList(importOrders);
+                    importOderListView.setAdapter(importOrderAdapter);
                 }
-            };
-
-
-            queue.add(stringRequest);
+            });
 
 //            txtCountIO.setText("Count" + importOrders.size());
 //            importOrderAdapter.setImportOrderList(importOrders);
