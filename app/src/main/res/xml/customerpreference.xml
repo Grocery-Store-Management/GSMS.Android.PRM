@@ -3,6 +3,10 @@
 
     <PreferenceCategory android:title="Information ">
         <EditTextPreference
+            android:key="IdCustomerId"
+            android:summary="Id of the user"
+            android:title="Id : " />
+        <EditTextPreference
             android:key="IdCustomerPassword"
             android:summary="Password of the user"
             android:title="Password : " />
