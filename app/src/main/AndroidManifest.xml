@@ -13,6 +13,9 @@
             android:name=".activities.import_order.ImportOrderListActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.customer.CustomerPreferenceActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.customer.CustomerActivity"
             android:exported="false" />
         <activity
