@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.import_order.ImportOrderListActivity">
+    android:orientation="vertical">
 
+<!--    Single ListItem for ImportOrder -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Import Orders List"
+        android:id="@+id/txtImportOrderName"
+        android:textSize="10dp"
         android:textStyle="bold"
-        android:textSize="20dp"
-        android:gravity="center" />
-
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/txtCountIO" />
-    <ListView
+        android:id="@+id/txtImportOrderStore"
+        />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/importOrderList" />
+        android:id="@+id/txtImportOrderDate"
+        />
 
 </LinearLayout>

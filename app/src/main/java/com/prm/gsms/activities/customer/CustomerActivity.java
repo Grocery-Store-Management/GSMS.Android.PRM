@@ -1,8 +1,8 @@
 package com.prm.gsms.activities.customer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.prm.gsms.R;
 

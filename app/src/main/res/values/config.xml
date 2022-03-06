@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="apiUrl">https://gsms-api-prm.azurewebsites.net/api</string>
+    <string name="bearer">
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjE4NmFmNjY2LWMzM2EtNGZjMy05OGJlLTU4MWVjYzdiNTk0OCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJwaG9uZ250IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU4iLCJqdGkiOiI3ZWUwYzZjYS0yZjFjLTRlZGMtYjlkNy0zMjU1M2Q0NGYxZGUiLCJleHAiOjE2NDY1NzcyNTUsImlzcyI6Imh0dHBzOi8vZ3Ntcy1hcGktcHJtLmF6dXJld2Vic2l0ZXMubmV0IiwiYXVkIjoiaHR0cHM6Ly9nc21zLWFwaS1wcm0uYXp1cmV3ZWJzaXRlcy5uZXQifQ.j98_87gCxdOOswPOytHsM7DbcuDipTnA11AyJ2_PBbQ
+    </string>
 </resources>

@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_customer.xml" value="0.11231884057971014" />
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_import_order_list.xml" value="0.1082427536231884" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_main.xml" value="0.11231884057971014" />
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/import_order_list_item.xml" value="0.10235507246376811" />
       </map>
     </option>
   </component>
