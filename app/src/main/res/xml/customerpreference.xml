@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Information ">
+        <EditTextPreference
+            android:key="IdCustomerPassword"
+            android:summary="Password of the user"
+            android:title="Password : " />
+        <EditTextPreference
+            android:key="IdCustomerPhone"
+            android:summary="Phone Number of the user"
+            android:title="Phone number : " />
+    </PreferenceCategory>
+
+</PreferenceScreen>
