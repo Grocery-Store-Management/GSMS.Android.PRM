@@ -1,11 +1,13 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class ImportOrder {
+public class ImportOrder implements Serializable {
     private String id, name, storeId;
     private boolean isDeleted;
     private Timestamp createdDate;
+    private Store store;
 
     public ImportOrder(String id, String name, String storeId, boolean isDeleted, Timestamp createdDate) {
         this.id = id;
@@ -13,6 +15,23 @@ public class ImportOrder {
         this.storeId = storeId;
         this.isDeleted = isDeleted;
         this.createdDate = createdDate;
+    }
+
+    public ImportOrder(String id, String name, String storeId, boolean isDeleted, Timestamp createdDate, Store store) {
+        this.id = id;
+        this.name = name;
+        this.storeId = storeId;
+        this.isDeleted = isDeleted;
+        this.createdDate = createdDate;
+        this.store = store;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 
     public String getId() {
