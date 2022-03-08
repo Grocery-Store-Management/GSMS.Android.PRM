@@ -1,8 +1,9 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Employee {
+public class Employee implements Serializable {
     private String id, name, password, storeId, role;
     private Timestamp createdDate;
     private boolean isDeleted;

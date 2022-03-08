@@ -1,6 +1,8 @@
 package com.prm.gsms.dtos;
 
-public class ImportOrderDetail {
+import java.io.Serializable;
+
+public class ImportOrderDetail implements Serializable {
     private String id, orderId, name, distributor, productId;
     private int quantity;
     private boolean isDeleted;
