@@ -17,4 +17,9 @@ public class ImportOrderService {
         importOrders = gson.fromJson(importOrderJson, type);
         return importOrders;
     }
+
+    public static String getJsonString(ImportOrder importOrder) {
+        Gson gson = GsmsUtils.createGson();
+        return gson.toJson(importOrder);
+    }
 }

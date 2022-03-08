@@ -1,12 +1,24 @@
 package com.prm.gsms.dtos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class ReceiptDetail implements Serializable {
-    private String id, receiptId, productId;
+    private String id, receiptId, productId, name;
     private int quantity;
     private Timestamp createdDate;
+    private BigDecimal price;
+
+    public ReceiptDetail(String id, String receiptId, String productId, String name, int quantity, Timestamp createdDate, BigDecimal price) {
+        this.id = id;
+        this.receiptId = receiptId;
+        this.productId = productId;
+        this.name = name;
+        this.quantity = quantity;
+        this.createdDate = createdDate;
+        this.price = price;
+    }
 
     public String getId() {
         return id;
@@ -45,14 +57,6 @@ public class ReceiptDetail implements Serializable {
     }
 
     public void setCreatedDate(Timestamp createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public ReceiptDetail(String id, String receiptId, String productId, int quantity, Timestamp createdDate) {
-        this.id = id;
-        this.receiptId = receiptId;
-        this.productId = productId;
-        this.quantity = quantity;
         this.createdDate = createdDate;
     }
 }

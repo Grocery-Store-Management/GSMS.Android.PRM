@@ -2,25 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingLeft="5dp"
+    >
 
 <!--    Single ListItem for ImportOrder -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtImportOrderName"
-        android:textSize="10dp"
+        android:textSize="15dp"
         android:textStyle="bold"
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtImportOrderStore"
+        android:paddingLeft="10dp"
+        android:text="At Store: "
         />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtImportOrderDate"
+        android:paddingLeft="10dp"
+        android:text="On: "
         />
 
 </LinearLayout>

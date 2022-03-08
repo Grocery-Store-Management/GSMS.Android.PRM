@@ -43,9 +43,11 @@ public class ImportOrderAdapter extends BaseAdapter {
         TextView txtImportOrderName = view.findViewById(R.id.txtImportOrderName);
         TextView txtImportOrderStore = view.findViewById(R.id.txtImportOrderStore);
         TextView txtImportOrderDate = view.findViewById(R.id.txtImportOrderDate);
+
         ImportOrder importOrder = importOrderList.get(i);
+
         txtImportOrderName.setText(importOrder.getName());
-        txtImportOrderStore.setText("Store: " + importOrder.getStoreId());
+        txtImportOrderStore.setText("Store: " + importOrder.getStore().getName());
         txtImportOrderDate.setText("Import Date: " + importOrder.getCreatedDate());
         return view;
     }
