@@ -52,7 +52,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
                 customerId = s;
             }
             if (customerId != null)
-                GsmsUtils.apiUtils(this, Request.Method.GET,"customers/" + customerId, new VolleyCallback() {
+                GsmsUtils.apiUtils(this, Request.Method.GET,"customers/" + customerId, "", new VolleyCallback() {
                     @Override
                     public void onSuccess(String result) {
                         curCustomer = CustomerService.getCustomerInfoById(result);

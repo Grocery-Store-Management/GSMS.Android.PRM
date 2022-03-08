@@ -1,13 +1,16 @@
 package com.prm.gsms.dtos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class ImportOrderDetail implements Serializable {
     private String id, orderId, name, distributor, productId;
     private int quantity;
     private boolean isDeleted;
+    private BigDecimal price;
 
-    public ImportOrderDetail(String id, String orderId, String name, String distributor, String productId, int quantity, boolean isDeleted) {
+    public ImportOrderDetail(String id, String orderId, String name, String distributor, String productId, int quantity, boolean isDeleted, BigDecimal price) {
         this.id = id;
         this.orderId = orderId;
         this.name = name;
@@ -15,6 +18,15 @@ public class ImportOrderDetail implements Serializable {
         this.productId = productId;
         this.quantity = quantity;
         this.isDeleted = isDeleted;
+        this.price = price;
+    }
+
+    public BigDecimal getPrice() {
+        return price.setScale(1, BigDecimal.ROUND_HALF_EVEN);
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getId() {

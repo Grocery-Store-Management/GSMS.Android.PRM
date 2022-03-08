@@ -1,38 +1,30 @@
 package com.prm.gsms.activities.import_order;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.prm.gsms.R;
 import com.prm.gsms.adapters.ImportOrderAdapter;
 import com.prm.gsms.dtos.ImportOrder;
 import com.prm.gsms.services.ImportOrderService;
 import com.prm.gsms.utils.GsmsUtils;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.prm.gsms.R;
 import com.prm.gsms.utils.VolleyCallback;
 
 public class ImportOrderListActivity extends AppCompatActivity {
 
-    private ListView importOderListView;
+    private ListView importOrderListView;
 
     // ListView Adapter
     private ImportOrderAdapter importOrderAdapter;
@@ -48,26 +40,34 @@ public class ImportOrderListActivity extends AppCompatActivity {
     private static List<ImportOrder> importOrders = null;
 
     private void loadImportOrderList(){
-        importOderListView = (ListView) findViewById(R.id.importOrderList);
+        importOrderListView = (ListView) findViewById(R.id.importOrderList);
         importOrderAdapter = new ImportOrderAdapter();
 
         TextView txtCountIO = (TextView) findViewById(R.id.txtCountIO);
         try {
-            RequestQueue queue = Volley.newRequestQueue(this);
-            GsmsUtils.apiUtils(this, Request.Method.GET,  "import-orders" , new VolleyCallback() {
+            GsmsUtils.apiUtils(this,
+                    Request.Method.GET,
+                    "import-orders" ,
+                    "",
+                    new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
                     importOrders = ImportOrderService.getImportOrders(result);
-                    txtCountIO.setText(importOrders.size() + "");
+                    txtCountIO.setText("Number of Import Orders: " + importOrders.size() + " orders");
                     importOrderAdapter.setImportOrderList(importOrders);
-                    importOderListView.setAdapter(importOrderAdapter);
+                    importOrderListView.setAdapter(importOrderAdapter);
+                    importOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            ImportOrder importOrder = (ImportOrder) importOrderListView.getItemAtPosition(i);
+                            Intent intent = new Intent(ImportOrderListActivity.this, ImportOrderDetailsActivity.class);
+                            intent.putExtra("importOrder", importOrder);
+                            startActivity(intent);
+                        }
+                    });
                 }
+
             });
-
-//            txtCountIO.setText("Count" + importOrders.size());
-//            importOrderAdapter.setImportOrderList(importOrders);
-//            importOderListView.setAdapter(importOrderAdapter);
-
         } catch (Exception ex){
             ex.printStackTrace();
         }
