@@ -1,8 +1,9 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Customer {
+public class Customer implements Serializable {
     private String id;
     private String point;
     private String phoneNumber;

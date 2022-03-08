@@ -1,8 +1,9 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Receipt {
+public class Receipt implements Serializable {
     private String id, customerId, employeeId, storeId;
     private Timestamp createdDate;
     private boolean isDeleted;

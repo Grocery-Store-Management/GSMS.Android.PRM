@@ -1,9 +1,10 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class Product {
+public class Product implements Serializable {
     private String id, name, categoryId;
     private boolean isDeleted;
     private int status;

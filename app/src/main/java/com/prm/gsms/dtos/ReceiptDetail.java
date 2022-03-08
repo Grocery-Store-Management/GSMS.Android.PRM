@@ -1,8 +1,9 @@
 package com.prm.gsms.dtos;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class ReceiptDetail {
+public class ReceiptDetail implements Serializable {
     private String id, receiptId, productId;
     private int quantity;
     private Timestamp createdDate;
