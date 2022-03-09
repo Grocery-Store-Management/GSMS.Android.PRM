@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.prm.gsms.R;
 import com.prm.gsms.adapters.ImportOrderDetailsAdapter;
@@ -61,6 +62,10 @@ public class ImportOrderDetailsActivity extends AppCompatActivity {
                             importOrderDetailsListView.setAdapter(importOrderDetailsAdapter);
 
                         }
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //TODO
+                        }
                     });
         } catch (Exception ex){
             ex.printStackTrace();
@@ -81,6 +86,10 @@ public class ImportOrderDetailsActivity extends AppCompatActivity {
                                      "Cancel Order successfully!!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ImportOrderDetailsActivity.this, ImportOrderListActivity.class);
                             startActivity(intent);
+                         }
+                         @Override
+                         public void onErrorResponse(VolleyError error) {
+                             //TODO
                          }
                      }
              );

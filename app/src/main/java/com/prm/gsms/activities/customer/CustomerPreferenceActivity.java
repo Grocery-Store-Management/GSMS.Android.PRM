@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import androidx.annotation.Nullable;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.prm.gsms.R;
 import com.prm.gsms.dtos.Customer;
 import com.prm.gsms.services.CustomerService;
@@ -56,6 +57,11 @@ public class CustomerPreferenceActivity extends PreferenceActivity
                     @Override
                     public void onSuccess(String result) {
                         curCustomer = CustomerService.getCustomerInfoById(result);
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //TODO
                     }
                 });
         } catch (Exception e) {

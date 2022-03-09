@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.prm.gsms.R;
 import com.prm.gsms.dtos.Customer;
 import com.prm.gsms.dtos.Employee;
@@ -77,12 +78,14 @@ public class LoginMainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if(error.networkResponse.statusCode == 401){
+                        txtLoginError.setText("Incorrect user name or password! \n Please try again.");
+                    }
+                }
             });
-            if(token != null && !token.isEmpty()){
-                txtLoginError.setText("");
-            } else {
-                txtLoginError.setText("Incorrect user name or password! \n Please try again.");
-            }
         } else {
             if(!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()){
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
@@ -108,12 +111,13 @@ public class LoginMainActivity extends AppCompatActivity {
                         startActivity(intent);
                     } 
                 }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if(error.networkResponse.statusCode == 401){
+                        txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
+                    }
+                }
             });
-            if(token != null && !token.isEmpty()){
-                txtLoginError.setText("");
-            } else {
-                txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
-            }
         }
     }
 }

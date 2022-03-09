@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.prm.gsms.R;
 import com.prm.gsms.adapters.ImportOrderAdapter;
@@ -67,7 +68,11 @@ public class ImportOrderListActivity extends AppCompatActivity {
                     });
                 }
 
-            });
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //TODO
+                        }
+                    });
         } catch (Exception ex){
             ex.printStackTrace();
         }
