@@ -20,6 +20,11 @@ public class Customer implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public Customer(String phoneNumber, String password){
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
+
     public String getId() {
         return id;
     }

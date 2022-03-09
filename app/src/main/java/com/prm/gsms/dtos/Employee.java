@@ -18,6 +18,11 @@ public class Employee implements Serializable {
         this.isDeleted = isDeleted;
     }
 
+    public Employee(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
     public String getId() {
         return id;
     }
