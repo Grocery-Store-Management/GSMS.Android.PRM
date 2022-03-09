@@ -1,5 +1,7 @@
 package com.prm.gsms.utils;
 
+import com.android.volley.VolleyError;
+
 //
 //int GET = 0;
 //        int POST = 1;
@@ -11,4 +13,5 @@ package com.prm.gsms.utils;
 //        int PATCH = 7;
 public interface VolleyCallback {
     void onSuccess(String result);
+    void onErrorResponse(VolleyError error);
 }
