@@ -16,6 +16,12 @@
             android:name=".activities.import_order.ImportOrderDetailsActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.login.LoginMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.login.DashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.import_order.ImportOrderListActivity"
             android:exported="false" />
         <activity
@@ -25,7 +31,7 @@
             android:name=".activities.customer.CustomerActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

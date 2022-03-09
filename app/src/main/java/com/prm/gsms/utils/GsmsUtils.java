@@ -10,12 +10,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.prm.gsms.R;
 import com.prm.gsms.activities.customer.CustomerPreferenceActivity;
+import com.prm.gsms.dtos.Customer;
+import com.prm.gsms.dtos.Employee;
+
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -79,5 +85,53 @@ public class GsmsUtils {
             }
         };
         queue.add(strReq);
+    }
+
+    public static void apiUtilsForLogin(Context context, int method, String url,
+                                        Object object, String type, VolleyCallback callback){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = null;
+        JSONObject jsBody = new JSONObject();
+        if(type.equals("employee")){
+            try{
+                jsBody.put("name", ((Employee)object).getName());
+                jsBody.put("password", ((Employee)object).getPassword());
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+        } else {
+            try{
+                jsBody.put("phoneNumber", ((Customer)object).getPhoneNumber());
+                jsBody.put("password", ((Customer)object).getPassword());
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        switch (method){
+            case Request.Method.POST: {
+                jsonObjectRequest = new JsonObjectRequest(
+                        Request.Method.POST, BASE_URL + url, jsBody,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                callback.onSuccess(response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Error", "onErrorResponse: " + error.getMessage());
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        return headers;
+                    }
+
+                };
+            }
+        }
+        queue.add(jsonObjectRequest);
     }
 }
