@@ -39,4 +39,8 @@ public class CustomerService {
         foundCustomer = gson.fromJson(customerJson, type);
         return foundCustomer;
     }
+
+    public static void updateCustomerInfo(String id, Customer customer) {
+
+    }
 }

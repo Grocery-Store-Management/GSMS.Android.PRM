@@ -1,9 +1,7 @@
 package com.prm.gsms.utils;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceActivity;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -16,16 +14,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.prm.gsms.R;
-import com.prm.gsms.activities.customer.CustomerPreferenceActivity;
 import com.prm.gsms.dtos.Customer;
 import com.prm.gsms.dtos.Employee;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -43,7 +37,7 @@ public class GsmsUtils {
     }
 
     public static void apiUtils (Context context, int method,
-                                 String url, VolleyCallback callback) throws JSONException {
+                                 String url , VolleyCallback callback) throws JSONException {
         apiUtils(context, method, url, "", callback);
     }
     public static void apiUtils(Context context, int method,
@@ -51,47 +45,88 @@ public class GsmsUtils {
                                 VolleyCallback callback) throws JSONException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE);
         String bearerStr = sharedPreferences.getString("token","");
-        JSONObject object = new JSONObject(bearerStr);
-        bearer = object.getString("token");
+        bearer = bearerStr;
         if(!bearer.isEmpty()){
             RequestQueue queue = Volley.newRequestQueue(context);
-            StringRequest strReq = null;
-            strReq = new StringRequest(method,
-                    BASE_URL + url,
-                    new Response.Listener<String>() {
+            Request strReq = null;
+            switch (method){
+                case Request.Method.GET:{
+                    strReq = new StringRequest(method,
+                            BASE_URL + url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    callback.onSuccess(response);
+                                }
+                            }, new Response.ErrorListener() {
                         @Override
-                        public void onResponse(String response) {
-                            callback.onSuccess(response);
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error",
+                                    "URL: " + BASE_URL + url + "\n" +
+                                            "Response Code: " + error.networkResponse.statusCode + "\n" +
+                                            "onErrorResponse: " + error.getMessage());
+                            callback.onErrorResponse(error);
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("Error",
-                            "URL: " + BASE_URL + url + "\n" +
-                                    "Response Code: " + error.networkResponse.statusCode + "\n" +
-                                    "onErrorResponse: " + error.getMessage());
-                    callback.onErrorResponse(error);
+                    }
+                    ) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("User-Agent", "GSMS-app");
+                            headers.put("Authorization", "Bearer " + bearer);
+                            return headers;
+                        }
+
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json; charset=utf-8";
+                        }
+
+                        @Override
+                        public byte[] getBody() throws AuthFailureError {
+                            return body.isEmpty() ? null : body.getBytes(StandardCharsets.UTF_8);
+                        }
+                    };
+                    break;
+                }
+                case Request.Method.POST:{
+                    strReq = new JsonObjectRequest(method,
+                            BASE_URL + url,
+                            new JSONObject(body),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    callback.onSuccess(response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error",
+                                    "URL: " + BASE_URL + url + "\n" +
+                                            "Response Code: " + error.networkResponse.statusCode + "\n" +
+                                            "onErrorResponse: " + error.getMessage());
+                            callback.onErrorResponse(error);
+                        }
+                    }
+                    ) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("User-Agent", "GSMS-app");
+                            headers.put("Authorization", "Bearer " + bearer);
+                            return headers;
+                        }
+
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json; charset=utf-8";
+                        }
+                    };
                 }
             }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("User-Agent", "GSMS-app");
-                    headers.put("Authorization", "Bearer " + bearer);
-                    return headers;
-                }
 
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset=utf-8";
-                }
 
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    return body.isEmpty() ? null : body.getBytes(StandardCharsets.UTF_8);
-                }
-            };
+
             queue.add(strReq);
         }
     }

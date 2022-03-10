@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.prm.gsms.dtos.Employee;
 import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
+import org.json.*;
 public class LoginMainActivity extends AppCompatActivity {
 
     private TextView txtLoginAs;
@@ -66,7 +68,14 @@ public class LoginMainActivity extends AppCompatActivity {
             GsmsUtils.apiUtilsForLogin(this, Request.Method.POST, "employees/login/", employee, type, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
-                    token = result;
+                    JSONObject object = null;
+                    try {
+                        object = new JSONObject(result);
+                        JSONObject data = (JSONObject) object.get("token");
+                        token = data.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     if(token != null && !token.isEmpty()){
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
@@ -99,8 +108,13 @@ public class LoginMainActivity extends AppCompatActivity {
             GsmsUtils.apiUtilsForLogin(this, Request.Method.POST, "customers/login/", customer, type, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
-                    token = result;
-
+                    JSONObject object = null;
+                    try {
+                        object = new JSONObject(result);
+                        token = object.getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     if(token != null && !token.isEmpty()){
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginPreferences.edit();

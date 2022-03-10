@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prm.gsms.R;
+import com.prm.gsms.activities.customer.CustomerActivity;
 import com.prm.gsms.activities.import_order.ImportOrderListActivity;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -81,8 +82,8 @@ public class DashboardActivity extends AppCompatActivity {
             btnProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                    //startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), CustomerActivity.class);
+                    startActivity(intent);
                 }
             });
         }
