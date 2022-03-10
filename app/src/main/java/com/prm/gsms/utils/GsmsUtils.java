@@ -5,11 +5,15 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -20,6 +24,7 @@ import com.prm.gsms.dtos.Employee;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -36,21 +41,22 @@ public class GsmsUtils {
         return gson;
     }
 
-    public static void apiUtils (Context context, int method,
-                                 String url , VolleyCallback callback) throws JSONException {
+    public static void apiUtils(Context context, int method,
+                                String url, VolleyCallback callback) throws JSONException {
         apiUtils(context, method, url, "", callback);
     }
+
     public static void apiUtils(Context context, int method,
                                 String url, String body,
                                 VolleyCallback callback) throws JSONException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE);
-        String bearerStr = sharedPreferences.getString("token","");
+        String bearerStr = sharedPreferences.getString("token", "");
         bearer = bearerStr;
-        if(!bearer.isEmpty()){
+        if (!bearer.isEmpty()) {
             RequestQueue queue = Volley.newRequestQueue(context);
             Request strReq = null;
-            switch (method){
-                case Request.Method.GET:{
+            switch (method) {
+                case Request.Method.GET: {
                     strReq = new StringRequest(method,
                             BASE_URL + url,
                             new Response.Listener<String>() {
@@ -89,7 +95,7 @@ public class GsmsUtils {
                     };
                     break;
                 }
-                case Request.Method.POST:{
+                case Request.Method.POST: {
                     strReq = new JsonObjectRequest(method,
                             BASE_URL + url,
                             new JSONObject(body),
@@ -123,22 +129,23 @@ public class GsmsUtils {
                         }
                     };
                 }
-                case Request.Method.PUT:{
-                    Log.d("why???", new JSONObject(body).toString());
-                    strReq = new JsonObjectRequest(method,
+                case Request.Method.PUT: {
+                    strReq = new JsonRequest(method,
                             BASE_URL + url,
-                            new JSONObject(body),
-                            new Response.Listener<JSONObject>() {
+                            body,
+                            new Response.Listener() {
                                 @Override
-                                public void onResponse(JSONObject response) {
-                                    callback.onSuccess(response.toString());
+                                public void onResponse(Object response) {
+                                    if (response != null) {
+                                        callback.onSuccess(response.toString());
+                                    } else {
+                                        callback.onSuccess("");
+                                    }
                                 }
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("Error",
-                                    "URL: " + BASE_URL + url + "\n" +
-                                            "onErrorResponse: " + error.getMessage());
+                            Log.d("Error", "onErrorResponse: " + error.getMessage());
                             callback.onErrorResponse(error);
                         }
                     }
@@ -150,6 +157,23 @@ public class GsmsUtils {
                             headers.put("Content-Type", "application/json");
                             headers.put("Authorization", "Bearer " + bearer);
                             return headers;
+                        }
+
+                        @Override
+                        protected Response parseNetworkResponse(NetworkResponse response) {
+                            try {
+                                String jsonString = new String(response.data,
+                                        HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+                                JSONObject result = null;
+                                if (jsonString != null && jsonString.length() > 0)
+                                    result = new JSONObject(jsonString);
+                                return Response.success(result,
+                                        HttpHeaderParser.parseCacheHeaders(response));
+                            } catch (UnsupportedEncodingException e) {
+                                return Response.error(new ParseError(e));
+                            } catch (JSONException je) {
+                                return Response.error(new ParseError(je));
+                            }
                         }
 
                         @Override
@@ -165,26 +189,26 @@ public class GsmsUtils {
     }
 
     public static void apiUtilsForLogin(Context context, int method, String url,
-                                        Object object, String type, VolleyCallback callback){
+                                        Object object, String type, VolleyCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonObjectRequest jsonObjectRequest = null;
         JSONObject jsBody = new JSONObject();
-        if(type.equals("employee")){
-            try{
-                jsBody.put("name", ((Employee)object).getName());
-                jsBody.put("password", ((Employee)object).getPassword());
-            } catch (Exception ex){
+        if (type.equals("employee")) {
+            try {
+                jsBody.put("name", ((Employee) object).getName());
+                jsBody.put("password", ((Employee) object).getPassword());
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         } else {
-            try{
-                jsBody.put("phoneNumber", ((Customer)object).getPhoneNumber());
-                jsBody.put("password", ((Customer)object).getPassword());
-            } catch (Exception ex){
+            try {
+                jsBody.put("phoneNumber", ((Customer) object).getPhoneNumber());
+                jsBody.put("password", ((Customer) object).getPassword());
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        switch (method){
+        switch (method) {
             case Request.Method.POST: {
                 jsonObjectRequest = new JsonObjectRequest(
                         Request.Method.POST, BASE_URL + url, jsBody,
