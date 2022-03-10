@@ -71,8 +71,9 @@ public class LoginMainActivity extends AppCompatActivity {
                     JSONObject object = null;
                     try {
                         object = new JSONObject(result);
-                        JSONObject data = (JSONObject) object.get("token");
-                        token = data.getString("token");
+//                        JSONObject data = (JSONObject) object.get("token");
+//                        token = data.getString("token");
+                        token = object.getString("token");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
