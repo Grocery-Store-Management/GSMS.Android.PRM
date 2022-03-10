@@ -10,7 +10,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 
@@ -50,19 +52,16 @@ public class CustomerPreferenceActivity extends PreferenceActivity
         try {
             SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
             String token = loginPreferences.getString("token", null);
-            Log.d("condilztranphong1", token);
-            byte[] data = Base64.decode(token, Base64.DEFAULT);
+            token = token.substring(token.indexOf(".") + 1, token.lastIndexOf("."));
 
+            byte[] data = Base64.decode(token, Base64.DEFAULT);
             String tokenData = new String(data, "UTF-8");
-            String customerObjectData = tokenData.substring(
-                    tokenData.lastIndexOf("{")
-            );
-            JSONObject customerJSONObject = new JSONObject(customerObjectData);
+
+            JSONObject customerJSONObject = new JSONObject(tokenData);
             customerId = customerJSONObject.getString("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
-            Log.d("condilztranphong2", customerId);
             addPreferencesFromResource(R.xml.customerpreference);
             SharedPreferences sharedPrefs = getSharedPreferences("com.prm.gsms_customer_preferences", MODE_PRIVATE);
-
+            SharedPreferences.Editor editor = sharedPrefs.edit();
             if (customerId != null)
                 GsmsUtils.apiUtils(this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
                     @Override
@@ -72,7 +71,6 @@ public class CustomerPreferenceActivity extends PreferenceActivity
                             edtId = (EditTextPreference) findPreference("IdCustomerId");
                             edtPassword = (EditTextPreference) findPreference("IdCustomerPassword");
                             edtPhone = (EditTextPreference) findPreference("IdCustomerPhone");
-                            SharedPreferences.Editor editor = sharedPrefs.edit();
                             editor.putString("IdCustomerId", curCustomer.getId());
                             editor.putString("IdCustomerPassword", curCustomer.getPassword());
                             editor.putString("IdCustomerPhone", curCustomer.getPhoneNumber());
@@ -92,7 +90,6 @@ public class CustomerPreferenceActivity extends PreferenceActivity
                 edtId = (EditTextPreference) findPreference("IdCustomerId");
                 edtPassword = (EditTextPreference) findPreference("IdCustomerPassword");
                 edtPhone = (EditTextPreference) findPreference("IdCustomerPhone");
-                SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putString("IdCustomerId", curCustomer.getId());
                 editor.putString("IdCustomerPassword", curCustomer.getPassword());
                 editor.putString("IdCustomerPhone", curCustomer.getPhoneNumber());
@@ -125,7 +122,11 @@ public class CustomerPreferenceActivity extends PreferenceActivity
     private void updatePreference(Preference p, SharedPreferences sharedPreferences) {
         if (p instanceof EditTextPreference) {
             EditTextPreference edt = (EditTextPreference) p;
-            p.setSummary(edt.getText());
+            if (curCustomer == null) {
+                p.setSummary("");
+            } else {
+                p.setSummary(edt.getText());
+            }
         }
     }
 
@@ -154,9 +155,11 @@ public class CustomerPreferenceActivity extends PreferenceActivity
         try {
             Gson gson = new Gson();
             String curCustomerJson = gson.toJson(curCustomer);
-            GsmsUtils.apiUtils(this, Request.Method.POST, "customers/" + curCustomer.getId(), curCustomerJson, new VolleyCallback() {
+            Log.d("aylmao", curCustomerJson);
+            GsmsUtils.apiUtils(this, Request.Method.PUT, "customers/" + curCustomer.getId(), curCustomerJson, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
+
                 }
 
                 @Override

@@ -123,10 +123,43 @@ public class GsmsUtils {
                         }
                     };
                 }
+                case Request.Method.PUT:{
+                    Log.d("why???", new JSONObject(body).toString());
+                    strReq = new JsonObjectRequest(method,
+                            BASE_URL + url,
+                            new JSONObject(body),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    callback.onSuccess(response.toString());
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Error",
+                                    "URL: " + BASE_URL + url + "\n" +
+                                            "onErrorResponse: " + error.getMessage());
+                            callback.onErrorResponse(error);
+                        }
+                    }
+                    ) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("User-Agent", "GSMS-app");
+                            headers.put("Content-Type", "application/json");
+                            headers.put("Authorization", "Bearer " + bearer);
+                            return headers;
+                        }
+
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json; charset=utf-8";
+                        }
+                    };
+                }
+
             }
-
-
-
             queue.add(strReq);
         }
     }
