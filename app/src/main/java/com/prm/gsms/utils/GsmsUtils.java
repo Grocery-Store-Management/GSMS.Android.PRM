@@ -69,7 +69,6 @@ public class GsmsUtils {
                         public void onErrorResponse(VolleyError error) {
                             Log.d("Error",
                                     "URL: " + BASE_URL + url + "\n" +
-                                            "Response Code: " + error.networkResponse.statusCode + "\n" +
                                             "onErrorResponse: " + error.getMessage());
                             callback.onErrorResponse(error);
                         }
@@ -109,7 +108,6 @@ public class GsmsUtils {
                         public void onErrorResponse(VolleyError error) {
                             Log.d("Error",
                                     "URL: " + BASE_URL + url + "\n" +
-                                            "Response Code: " + error.networkResponse.statusCode + "\n" +
                                             "onErrorResponse: " + error.getMessage());
                             callback.onErrorResponse(error);
                         }

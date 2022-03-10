@@ -6,41 +6,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.customer.CustomerActivity">
-
-    <TextView
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtPassword"/>
-    <TextView
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtPhoneNumber"
-        />
-    <TextView
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtPoint"
-        />
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit"
+        android:text="View Profile"
         android:onClick="clickToEdit"
         />
-    <ImageView
-        android:id="@+id/imgQR"
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Update Points"
+        android:onClick="clickToEditPoints"
         />
 
+    <com.budiyev.android.codescanner.CodeScannerView
+        android:layout_marginTop="100dp"
+        android:id="@+id/scanner_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:autoFocusButtonColor="@android:color/white"
+        app:autoFocusButtonVisible="true"
+        app:flashButtonColor="@android:color/white"
+        app:flashButtonVisible="true"
+        app:maskColor="#1E000000" />
 </LinearLayout>
