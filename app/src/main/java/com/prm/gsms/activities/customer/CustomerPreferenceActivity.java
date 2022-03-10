@@ -166,7 +166,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
                 @Override
                 public void onSuccess(String result) {
                     Toast.makeText(CustomerPreferenceActivity.this,
-                            "Porifle updated successfully!!", Toast.LENGTH_SHORT).show();
+                            "Profile updated successfully!!", Toast.LENGTH_SHORT).show();
                 }
                 @Override
                 public void onErrorResponse(VolleyError error) {
