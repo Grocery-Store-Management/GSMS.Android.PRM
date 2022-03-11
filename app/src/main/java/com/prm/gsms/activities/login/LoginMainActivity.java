@@ -2,8 +2,10 @@ package com.prm.gsms.activities.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,9 @@ import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.*;
+
+import java.net.UnknownHostException;
+
 public class LoginMainActivity extends AppCompatActivity {
 
     private TextView txtLoginAs;
@@ -43,7 +48,7 @@ public class LoginMainActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         Intent intent = this.getIntent();
         type = intent.getStringExtra("type");
-        if(type.equals("employee")){
+        if (type.equals("employee")) {
             txtLoginAs.setText("Login As Employee");
             txtUsernamePhonenumber.setText("User name");
         } else {
@@ -55,8 +60,8 @@ public class LoginMainActivity extends AppCompatActivity {
     }
 
     public void clickToLogin(View view) {
-        if(type.equals("employee")){
-            if(!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()){
+        if (type.equals("employee")) {
+            if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
                 password = edtPassword.getText().toString();
             } else {
@@ -78,7 +83,7 @@ public class LoginMainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(token != null && !token.isEmpty()){
+                    if (token != null && !token.isEmpty()) {
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginPreferences.edit();
                         editor.putString("token", token);
@@ -91,13 +96,13 @@ public class LoginMainActivity extends AppCompatActivity {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(error.networkResponse.statusCode == 401){
+                    if (error.networkResponse.statusCode == 401) {
                         txtLoginError.setText("Incorrect user name or password! \n Please try again.");
                     }
                 }
             });
         } else {
-            if(!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()){
+            if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
                 password = edtPassword.getText().toString();
             } else {
@@ -116,7 +121,7 @@ public class LoginMainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if(token != null && !token.isEmpty()){
+                    if (token != null && !token.isEmpty()) {
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginPreferences.edit();
                         editor.putString("token", token);
@@ -124,12 +129,15 @@ public class LoginMainActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
-                    } 
+                    }
                 }
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(error.networkResponse.statusCode == 401){
-                        txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
+                    if (error != null) {
+                        if (error.networkResponse.statusCode == 401) {
+                            txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
+                        }
                     }
                 }
             });

@@ -50,17 +50,8 @@ public class CustomerPreferenceActivity extends PreferenceActivity
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String customerId = "";
         try {
-            SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
-            String token = loginPreferences.getString("token", null);
-            token = token.substring(token.indexOf(".") + 1, token.lastIndexOf("."));
-
-            byte[] data = Base64.decode(token, Base64.DEFAULT);
-            String tokenData = new String(data, "UTF-8");
-
-            JSONObject customerJSONObject = new JSONObject(tokenData);
-            customerId = customerJSONObject.getString("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+            String customerId = GsmsUtils.getCurrentCustomerId(this);
             addPreferencesFromResource(R.xml.customerpreference);
             SharedPreferences sharedPrefs = getSharedPreferences("com.prm.gsms_customer_preferences", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -85,7 +76,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //TODO
+                        error.printStackTrace();
                     }
                 });
             if (curCustomer != null) {
@@ -145,6 +136,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
     protected void onResume() {
         super.onResume();
         getPreferenceScreen().findPreference("IdCustomerId").setEnabled(false);
+        getPreferenceScreen().findPreference("IdCustomerPhone").setEnabled(false);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -155,19 +147,23 @@ public class CustomerPreferenceActivity extends PreferenceActivity
         SharedPreferences sharedPrefs = getSharedPreferences("com.prm.gsms_customer_preferences", MODE_PRIVATE);
         String newPhoneNumber = sharedPrefs.getString("IdCustomerPhone", null);
         String newPassword = sharedPrefs.getString("IdCustomerPassword", null);
-        if (newPhoneNumber != null && newPassword != null) {
+        if (newPhoneNumber != null && newPassword != null
+                && !newPhoneNumber.trim().isEmpty() && !newPassword.trim().isEmpty()
+        ) {
             curCustomer.setPhoneNumber(newPhoneNumber);
             curCustomer.setPassword(newPassword);
         }
         try {
             Gson gson = new Gson();
             String curCustomerJson = gson.toJson(curCustomer);
+            Log.d("aol", curCustomerJson);
             GsmsUtils.apiUtils(this, Request.Method.PUT, "customers/" + curCustomer.getId(), curCustomerJson, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
                     Toast.makeText(CustomerPreferenceActivity.this,
                             "Profile updated successfully!!", Toast.LENGTH_SHORT).show();
                 }
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();

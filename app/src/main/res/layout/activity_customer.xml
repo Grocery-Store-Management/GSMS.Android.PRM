@@ -6,26 +6,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.customer.CustomerActivity">
+
+    <TextView
+        android:id="@+id/txtWelcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/txtCurrentPoints"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/btnEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Profile"
         android:onClick="clickToEdit"
-        />
+        android:text="View Profile" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update Points"
         android:onClick="clickToEditPoints"
-        />
+        android:text="Update Points" />
 
     <com.budiyev.android.codescanner.CodeScannerView
-        android:layout_marginTop="100dp"
         android:id="@+id/scanner_view"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:layout_marginTop="30dp"
         app:autoFocusButtonColor="@android:color/white"
         app:autoFocusButtonVisible="true"
         app:flashButtonColor="@android:color/white"
