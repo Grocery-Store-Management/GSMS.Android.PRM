@@ -56,46 +56,49 @@ public class CustomerActivity extends AppCompatActivity {
 
     private void refreshData() {
 
+        progressDialog = GsmsUtils.showLoading(this, "Loading data... Please wait...");
 
         txtWelcome = findViewById(R.id.txtWelcome);
         txtCurrentPoints = findViewById(R.id.txtCurrentPoints);
-        try {
-            customerId = GsmsUtils.getCurrentCustomerId(this);
-            GsmsUtils.apiUtils(this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    curCustomer = CustomerService.getCustomerInfoById(result);
-                    txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
-                    txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
-                    try {
-                        if (codeScanner == null) {
-                            setupPermissions();
-                            codeScanner();
+                try {
+                    customerId = GsmsUtils.getCurrentCustomerId(CustomerActivity.this);
+                    GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            curCustomer = CustomerService.getCustomerInfoById(result);
+                            txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
+                            txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
+                            try {
+                                if (codeScanner == null) {
+                                    setupPermissions();
+                                    codeScanner();
+                                }
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }finally {
+                                progressDialog.dismiss();
+                            }
                         }
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
-        refreshData();
     }
 
     private void codeScanner() throws UnsupportedEncodingException, JSONException {

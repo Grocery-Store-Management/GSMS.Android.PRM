@@ -99,7 +99,7 @@ public class LoginMainActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
-
+                    Log.d("asd", error.toString());
                     if (error != null) {
                         if (error.networkResponse.statusCode == 401) {
                             txtLoginError.setText("Incorrect user name or password! \n Please try again.");
