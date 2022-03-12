@@ -140,6 +140,8 @@ public class CustomerPreferenceActivity extends PreferenceActivity
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
+    boolean invalidPassword = false;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -147,28 +149,38 @@ public class CustomerPreferenceActivity extends PreferenceActivity
         SharedPreferences sharedPrefs = getSharedPreferences("com.prm.gsms_customer_preferences", MODE_PRIVATE);
         String newPhoneNumber = sharedPrefs.getString("IdCustomerPhone", null);
         String newPassword = sharedPrefs.getString("IdCustomerPassword", null);
-        if (newPhoneNumber != null && newPassword != null
-                && !newPhoneNumber.trim().isEmpty() && !newPassword.trim().isEmpty()
-        ) {
+        if (newPassword.trim().length() < 6 || newPassword.trim().length() > 12) {
+            invalidPassword = true;
+        }
+        if (!invalidPassword) {
             curCustomer.setPhoneNumber(newPhoneNumber);
             curCustomer.setPassword(newPassword);
         }
         try {
             Gson gson = new Gson();
             String curCustomerJson = gson.toJson(curCustomer);
-            Log.d("aol", curCustomerJson);
-            GsmsUtils.apiUtils(this, Request.Method.PUT, "customers/" + curCustomer.getId(), curCustomerJson, new VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    Toast.makeText(CustomerPreferenceActivity.this,
-                            "Profile updated successfully!!", Toast.LENGTH_SHORT).show();
-                }
+            if (!newPassword.equals(curCustomer.getPassword())) {
+                GsmsUtils.apiUtils(this, Request.Method.PUT, "customers/" + curCustomer.getId(), curCustomerJson, new VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        if (!invalidPassword) {
+                            Toast.makeText(CustomerPreferenceActivity.this,
+                                    "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                        if (invalidPassword) {
+                            Toast.makeText(CustomerPreferenceActivity.this,
+                                    "Invalid Password! Password must be between 6 to 12 characters! \n Nothing has been changed", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                }
-            });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(CustomerPreferenceActivity.this,
+                                "An error occurred! Please try again!", Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

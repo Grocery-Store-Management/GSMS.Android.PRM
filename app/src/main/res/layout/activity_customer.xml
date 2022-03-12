@@ -37,6 +37,16 @@
         android:onClick="clickToEditPoints"
         android:text="Update Points" />
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtError"
+        android:textColor="#FF0000"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        />
+
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/scanner_view"
         android:layout_width="match_parent"

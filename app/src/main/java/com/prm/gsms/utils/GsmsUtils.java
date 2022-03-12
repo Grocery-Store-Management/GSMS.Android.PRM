@@ -1,5 +1,6 @@
 package com.prm.gsms.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
@@ -250,6 +251,17 @@ public class GsmsUtils {
         String customerId = customerJSONObject.getString("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
         return customerId;
     }
+
+
+    public static ProgressDialog showLoading(Context context, String message){
+        ProgressDialog progress = new ProgressDialog(context);
+        progress.setTitle("Loading");
+        progress.setMessage(message);
+        progress.setCancelable(false);
+        progress.show();
+        return progress;
+    }
+
 }
 
 

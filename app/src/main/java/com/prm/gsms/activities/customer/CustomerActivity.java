@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -51,11 +52,13 @@ public class CustomerActivity extends AppCompatActivity {
 
     private TextView txtWelcome;
     private TextView txtCurrentPoints;
+    private ProgressDialog progressDialog;
 
     private void refreshData() {
+
+
         txtWelcome = findViewById(R.id.txtWelcome);
         txtCurrentPoints = findViewById(R.id.txtCurrentPoints);
-
         try {
             customerId = GsmsUtils.getCurrentCustomerId(this);
             GsmsUtils.apiUtils(this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
@@ -112,7 +115,11 @@ public class CustomerActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             String data = result.getText();
-                            GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.PUT, "customers/" + customerId, data, new VolleyCallback() {
+                            int idIndex = data.indexOf("\"id\":");
+                            String beg = data.substring(0, idIndex + 5);
+                            String end = data.substring(idIndex + 5);
+                            String realData = beg + "\"" + customerId + "\"" + end;
+                            GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.PUT, "customers/" + customerId, realData, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
                                     Toast.makeText(CustomerActivity.this,
@@ -122,6 +129,10 @@ public class CustomerActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
+                                    TextView txtError = findViewById(R.id.txtError);
+                                    txtError.setText("An error occurred! Please try again!");
+                                    Toast.makeText(CustomerActivity.this,
+                                            "An error occurred! Please try again!", Toast.LENGTH_SHORT).show();
                                     error.printStackTrace();
                                 }
                             });
@@ -140,7 +151,6 @@ public class CustomerActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Log.d("QR", "Camera init error:  " + thrown.getMessage());
-
                     }
                 });
             }
@@ -188,6 +198,8 @@ public class CustomerActivity extends AppCompatActivity {
     }
 
     public void clickToEditPoints(View view) {
+        TextView txtError = findViewById(R.id.txtError);
+        txtError.setText("");
         codeScanner.startPreview();
     }
 }
