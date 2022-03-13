@@ -2,6 +2,9 @@ package com.prm.gsms.activities.import_order;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,6 +53,7 @@ public class ImportOrderDetailsActivity extends AppCompatActivity {
         importOrderDetailsAdapter = new ImportOrderDetailsAdapter();
 
         try {
+            ProgressDialog progressDialog = GsmsUtils.showLoading(this,"Getting Import Order Details...");
             GsmsUtils.apiUtils(this,
                     Request.Method.GET,
                     "import-order-details?orderId=" + orderId,
@@ -60,42 +64,69 @@ public class ImportOrderDetailsActivity extends AppCompatActivity {
                             importOrderDetails = ImportOrderDetailsService.getImportOrderDetails(result);
                             importOrderDetailsAdapter.setImportOrderDetailList(importOrderDetails);
                             importOrderDetailsListView.setAdapter(importOrderDetailsAdapter);
-
+                            progressDialog.dismiss();
                         }
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //TODO
+                        public void onErrorResponse(VolleyError error){
+                            progressDialog.dismiss();
+                            Toast.makeText(ImportOrderDetailsActivity.this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
+                            error.printStackTrace();
                         }
                     });
         } catch (Exception ex){
+            Toast.makeText(this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
     }
 
     public void clickToCancelIO(View view) {
-        try {
-            importOrder.setDeleted(true);
-             GsmsUtils.apiUtils(this,
-                     Request.Method.PUT,
-                     "import-orders/" + importOrder.getId(),
-                     ImportOrderService.getJsonString(importOrder),
-                     new VolleyCallback() {
-                         @Override
-                         public void onSuccess(String result) {
-                             Toast.makeText(ImportOrderDetailsActivity.this,
-                                     "Cancel Order successfully!!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ImportOrderDetailsActivity.this, ImportOrderListActivity.class);
-                            startActivity(intent);
-                         }
-                         @Override
-                         public void onErrorResponse(VolleyError error) {
-                             //TODO
-                         }
-                     }
-             );
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("Cancel Import Order");
+        builder.setMessage("Are you sure that you want to cancel this import order?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancel Import Order
+                ProgressDialog progressDialog = GsmsUtils.showLoading(ImportOrderDetailsActivity.this,"Getting Import Orders...");
+                try {
+                    importOrder.setDeleted(true);
+                    GsmsUtils.apiUtils(ImportOrderDetailsActivity.this,
+                            Request.Method.PUT,
+                            "import-orders/" + importOrder.getId(),
+                            ImportOrderService.getJsonString(importOrder),
+                            new VolleyCallback() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(ImportOrderDetailsActivity.this,
+                                            "Cancel Order successfully!!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(ImportOrderDetailsActivity.this, ImportOrderListActivity.class);
+                                    startActivity(intent);
+                                }
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(ImportOrderDetailsActivity.this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
+                                    error.printStackTrace();
+                                }
+                            }
+                    );
+                } catch (Exception ex){
+                    progressDialog.dismiss();
+                    Toast.makeText(ImportOrderDetailsActivity.this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
+                    ex.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog confirmDelete = builder.create();
+        confirmDelete.show();
     }
 
     public void clickToBackToListIO(View view) {
