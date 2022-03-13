@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/BACHELOUR/SPRING2022/PRM/GroupProject/GSMS.Android.PRM/app/src/main/res/layout/activity_customer.xml" value="0.27447916666666666" />
+        <entry key="..\:/BACHELOUR/SPRING2022/PRM/GroupProject/GSMS.Android.PRM/app/src/main/res/layout/activity_login_main.xml" value="0.19322916666666667" />
         <entry key="..\:/BACHELOUR/SPRING2022/PRM/GroupProject/GSMS.Android.PRM/app/src/main/res/layout/activity_main.xml" value="0.14375" />
         <entry key="..\:/BACHELOUR/SPRING2022/PRM/GroupProject/GSMS.Android.PRM/app/src/main/res/xml/customerpreference.xml" value="0.27447916666666666" />
         <entry key="..\:/FPT-SE/CN7/PRM391/GSMS.Android.PRM/app/src/main/res/layout/activity_customer.xml" value="0.176" />
@@ -16,7 +17,7 @@
         <entry key="..\:/FPT-SE/CN7/PRM391/GSMS.Android.PRM/app/src/main/res/xml/customerpreference.xml" value="0.264" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_customer.xml" value="0.11231884057971014" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_import_order_details.xml" value="0.15185185185185185" />
-        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_import_order_list.xml" value="0.5" />
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_import_order_list.xml" value="0.22" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_main.xml" value="0.11231884057971014" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/import_order_details_list_item.xml" value="0.15185185185185185" />
         <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/import_order_list_item.xml" value="0.25" />

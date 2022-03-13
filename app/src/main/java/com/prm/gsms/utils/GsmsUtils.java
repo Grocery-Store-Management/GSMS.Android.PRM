@@ -1,7 +1,10 @@
 package com.prm.gsms.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -52,6 +55,7 @@ public class GsmsUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPreferences", Context.MODE_PRIVATE);
         String bearerStr = sharedPreferences.getString("token", "");
         bearer = bearerStr;
+
         if (!bearer.isEmpty()) {
             RequestQueue queue = Volley.newRequestQueue(context);
             Request strReq = null;
@@ -234,4 +238,30 @@ public class GsmsUtils {
         }
         queue.add(jsonObjectRequest);
     }
+
+    public static String getCurrentCustomerId(Context context) throws UnsupportedEncodingException, JSONException {
+        SharedPreferences loginPreferences = context.getSharedPreferences("LoginPreferences", context.getApplicationContext().MODE_PRIVATE);
+        String token = loginPreferences.getString("token", null);
+        token = token.substring(token.indexOf(".") + 1, token.lastIndexOf("."));
+
+        byte[] data = Base64.decode(token, Base64.DEFAULT);
+        String tokenData = new String(data, "UTF-8");
+
+        JSONObject customerJSONObject = new JSONObject(tokenData);
+        String customerId = customerJSONObject.getString("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+        return customerId;
+    }
+
+
+    public static ProgressDialog showLoading(Context context, String message){
+        ProgressDialog progress = new ProgressDialog(context);
+        progress.setTitle("Loading");
+        progress.setMessage(message);
+        progress.setCancelable(false);
+        progress.show();
+        return progress;
+    }
+
 }
+
+

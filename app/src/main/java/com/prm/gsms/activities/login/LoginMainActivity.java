@@ -2,8 +2,11 @@ package com.prm.gsms.activities.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +23,9 @@ import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.*;
+
+import java.net.UnknownHostException;
+
 public class LoginMainActivity extends AppCompatActivity {
 
     private TextView txtLoginAs;
@@ -31,6 +37,7 @@ public class LoginMainActivity extends AppCompatActivity {
     private String token;
     private TextView txtLoginError;
     private String type;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,7 @@ public class LoginMainActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         Intent intent = this.getIntent();
         type = intent.getStringExtra("type");
-        if(type.equals("employee")){
+        if (type.equals("employee")) {
             txtLoginAs.setText("Login As Employee");
             txtUsernamePhonenumber.setText("User name");
         } else {
@@ -53,32 +60,32 @@ public class LoginMainActivity extends AppCompatActivity {
 
         txtLoginError = findViewById(R.id.txtLoginError);
     }
-
     public void clickToLogin(View view) {
-        if(type.equals("employee")){
-            if(!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()){
+        progressDialog =  GsmsUtils.showLoading(this, "Login in... Please wait...");
+        if (type.equals("employee")) {
+            if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
                 password = edtPassword.getText().toString();
             } else {
                 Toast.makeText(this, "Please input user name and password", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
                 return;
             }
             Employee employee = new Employee(userNamePhonenumber, password);
-
             GsmsUtils.apiUtilsForLogin(this, Request.Method.POST, "employees/login/", employee, type, new VolleyCallback() {
                 @Override
                 public void onSuccess(String result) {
                     JSONObject object = null;
                     try {
                         object = new JSONObject(result);
-//                        JSONObject data = (JSONObject) object.get("token");
-//                        token = data.getString("token");
                         token = object.getString("token");
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }finally {
+                        progressDialog.dismiss();
                     }
 
-                    if(token != null && !token.isEmpty()){
+                    if (token != null && !token.isEmpty()) {
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginPreferences.edit();
                         editor.putString("token", token);
@@ -91,17 +98,23 @@ public class LoginMainActivity extends AppCompatActivity {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(error.networkResponse.statusCode == 401){
-                        txtLoginError.setText("Incorrect user name or password! \n Please try again.");
-                    }
+                    progressDialog.dismiss();
+                    Log.d("asd", error.toString());
+//                    if (error != null) {
+//                        if (error.networkResponse.statusCode == 401) {
+//                            txtLoginError.setText("Incorrect user name or password! \n Please try again.");
+//                        }
+//                    }
+                    txtLoginError.setText("Incorrect user name or password! \n Please try again.");
                 }
             });
         } else {
-            if(!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()){
+            if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
                 password = edtPassword.getText().toString();
             } else {
                 Toast.makeText(this, "Please input phone number and password", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
                 return;
             }
             Customer customer = new Customer(userNamePhonenumber, password);
@@ -115,8 +128,10 @@ public class LoginMainActivity extends AppCompatActivity {
                         token = object.getString("token");
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }finally {
+                        progressDialog.dismiss();
                     }
-                    if(token != null && !token.isEmpty()){
+                    if (token != null && !token.isEmpty()) {
                         SharedPreferences loginPreferences = getApplicationContext().getSharedPreferences("LoginPreferences", MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginPreferences.edit();
                         editor.putString("token", token);
@@ -124,13 +139,19 @@ public class LoginMainActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
-                    } 
+                    }
                 }
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(error.networkResponse.statusCode == 401){
-                        txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
-                    }
+                    progressDialog.dismiss();
+
+//                    if (error != null) {
+//                        if (error.networkResponse.statusCode == 401) {
+//                            txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
+//                        }
+//                    }
+                    txtLoginError.setText("Incorrect user name or password! \n Please try again.");
                 }
             });
         }
