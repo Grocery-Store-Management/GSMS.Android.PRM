@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.prm.gsms.R;
 import com.prm.gsms.activities.customer.CustomerActivity;
 import com.prm.gsms.activities.import_order.ImportOrderListActivity;
+import com.prm.gsms.activities.report.ReportActivity;
 
 public class DashboardActivity extends AppCompatActivity {
     private TextView txtTitle;
@@ -61,8 +62,8 @@ public class DashboardActivity extends AppCompatActivity {
             btnReport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
+                    startActivity(intent);
                 }
             });
         } else {

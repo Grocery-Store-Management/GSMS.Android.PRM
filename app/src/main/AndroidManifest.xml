@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false"/>
+        android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GSMS">
+        <activity
+            android:name=".activities.report.ReportActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.import_order.ImportOrderDetailsActivity"
             android:exported="false" />
