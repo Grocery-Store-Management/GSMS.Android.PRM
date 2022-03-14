@@ -44,6 +44,8 @@ public class LoginMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         txtLoginAs = findViewById(R.id.txtLoginAs);
         txtUsernamePhonenumber = findViewById(R.id.txtUsernamePhoneNumber);
         edtUsernamePhonenumber = findViewById(R.id.edtUsernamePhoneNumber);
@@ -61,7 +63,7 @@ public class LoginMainActivity extends AppCompatActivity {
         txtLoginError = findViewById(R.id.txtLoginError);
     }
     public void clickToLogin(View view) {
-        progressDialog =  GsmsUtils.showLoading(this, "Login in... Please wait...");
+        progressDialog =  GsmsUtils.showLoading(this, "Logging in. Please wait...");
         if (type.equals("employee")) {
             if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
