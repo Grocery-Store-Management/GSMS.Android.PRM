@@ -122,6 +122,20 @@ public class CustomerActivity extends AppCompatActivity {
                             String beg = data.substring(0, idIndex + 5);
                             String end = data.substring(idIndex + 5);
                             String realData = beg + "\"" + customerId + "\"" + end;
+
+                            int pointIndex = realData.indexOf("\"point\":\"");
+                            String addPoints = realData.substring(pointIndex + 9, realData.lastIndexOf("\""));
+                            try{
+                            String totalPoints = String.valueOf(Integer.parseInt(curCustomer.getPoint()) + Integer.parseInt(addPoints));
+                                beg = realData.substring(0, pointIndex + 9);
+                                realData = beg + totalPoints + "\"}";
+                            }catch (NumberFormatException ex){
+                                ex.printStackTrace();
+                                TextView txtError = findViewById(R.id.txtError);
+                                txtError.setText("An error occurred! Please try again!");
+                                Toast.makeText(CustomerActivity.this,
+                                        "An error occurred! Please try again!", Toast.LENGTH_SHORT).show();
+                            }
                             GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.PUT, "customers/" + customerId, realData, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {

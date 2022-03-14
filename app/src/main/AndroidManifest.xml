@@ -24,22 +24,26 @@
             android:exported="false" />
         <activity
             android:name=".activities.report.ReportActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.login.DashboardActivity"/>
         <activity
             android:name=".activities.import_order.create.CreateImportOrderActivity"
             android:exported="false" />
         <activity
             android:name=".activities.import_order.ImportOrderDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.import_order.ImportOrderListActivity"/>
         <activity
             android:name=".activities.login.LoginMainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.login.LoginActivity"/>
         <activity
             android:name=".activities.login.DashboardActivity"
             android:exported="false" />
         <activity
             android:name=".activities.import_order.ImportOrderListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.login.DashboardActivity"/>
         <activity
             android:name=".activities.customer.CustomerPreferenceActivity"
             android:exported="false" />
