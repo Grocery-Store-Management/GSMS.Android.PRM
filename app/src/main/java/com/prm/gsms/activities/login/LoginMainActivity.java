@@ -44,6 +44,8 @@ public class LoginMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_main);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         txtLoginAs = findViewById(R.id.txtLoginAs);
         txtUsernamePhonenumber = findViewById(R.id.txtUsernamePhoneNumber);
         edtUsernamePhonenumber = findViewById(R.id.edtUsernamePhoneNumber);
@@ -61,7 +63,7 @@ public class LoginMainActivity extends AppCompatActivity {
         txtLoginError = findViewById(R.id.txtLoginError);
     }
     public void clickToLogin(View view) {
-        progressDialog =  GsmsUtils.showLoading(this, "Login in... Please wait...");
+        progressDialog =  GsmsUtils.showLoading(this, "Logging in. Please wait...");
         if (type.equals("employee")) {
             if (!edtUsernamePhonenumber.getText().toString().isEmpty() && !edtPassword.getText().toString().isEmpty()) {
                 userNamePhonenumber = edtUsernamePhonenumber.getText().toString();
@@ -100,11 +102,12 @@ public class LoginMainActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
                     Log.d("asd", error.toString());
-                    if (error != null) {
-                        if (error.networkResponse.statusCode == 401) {
-                            txtLoginError.setText("Incorrect user name or password! \n Please try again.");
-                        }
-                    }
+//                    if (error != null) {
+//                        if (error.networkResponse.statusCode == 401) {
+//                            txtLoginError.setText("Incorrect user name or password! \n Please try again.");
+//                        }
+//                    }
+                    txtLoginError.setText("Incorrect user name or password! \n Please try again.");
                 }
             });
         } else {
@@ -145,11 +148,12 @@ public class LoginMainActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     progressDialog.dismiss();
 
-                    if (error != null) {
-                        if (error.networkResponse.statusCode == 401) {
-                            txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
-                        }
-                    }
+//                    if (error != null) {
+//                        if (error.networkResponse.statusCode == 401) {
+//                            txtLoginError.setText("Incorrect phone number or password! \n Please try again.");
+//                        }
+//                    }
+                    txtLoginError.setText("Incorrect user name or password! \n Please try again.");
                 }
             });
         }
