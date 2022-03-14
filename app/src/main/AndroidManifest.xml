@@ -4,9 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -19,7 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GSMS">
         <activity
+            android:name=".activities.import_order.create.CartActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.report.ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.import_order.create.CreateImportOrderActivity"
             android:exported="false" />
         <activity
             android:name=".activities.import_order.ImportOrderDetailsActivity"
