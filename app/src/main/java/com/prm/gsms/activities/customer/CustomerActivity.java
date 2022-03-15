@@ -154,12 +154,22 @@ public class CustomerActivity extends AppCompatActivity {
                             String realData = beg + "\"" + customerId + "\"" + end;
 
                             int pointIndex = realData.indexOf("\"point\":\"");
-                            String addPoints = realData.substring(pointIndex + 9, realData.lastIndexOf("\""));
+                            String points = realData.substring(pointIndex + 9, realData.lastIndexOf("\""));
                             try {
-                                String totalPoints = String.valueOf(Integer.parseInt(curCustomer.getPoint()) + Integer.parseInt(addPoints));
+                                String totalPoints = String.valueOf(Integer.parseInt(curCustomer.getPoint()) + Integer.parseInt(points));
+                                if (Integer.parseInt(totalPoints) < 0) {
+                                    TextView txtError = findViewById(R.id.txtError);
+                                    txtError.setText("You do not have enough points! Please try again!");
+                                    Toast.makeText(CustomerActivity.this,
+                                            "You do not have enough points! Please try again!", Toast.LENGTH_SHORT).show();
+                                    if (clientSocket != null) {
+                                        clientSocket.close();
+                                    }
+                                    return;
+                                }
                                 beg = realData.substring(0, pointIndex + 9);
                                 realData = beg + totalPoints + "\"}";
-                            } catch (NumberFormatException ex) {
+                            } catch (Exception ex) {
                                 ex.printStackTrace();
                                 TextView txtError = findViewById(R.id.txtError);
                                 txtError.setText("An error occurred! Please try again!");
@@ -171,6 +181,14 @@ public class CustomerActivity extends AppCompatActivity {
                                 public void onSuccess(String result) {
                                     if (out != null) {
                                         out.println("OK");
+                                        out.close();
+                                        try {
+                                            if (clientSocket != null) {
+                                                clientSocket.close();
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                     Toast.makeText(CustomerActivity.this,
                                             "Points updated successfully!!", Toast.LENGTH_SHORT).show();
@@ -188,6 +206,7 @@ public class CustomerActivity extends AppCompatActivity {
                             });
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        } finally {
                         }
 
                     }
