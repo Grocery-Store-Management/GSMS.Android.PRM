@@ -46,6 +46,8 @@ public class LoginMainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         txtLoginAs = findViewById(R.id.txtLoginAs);
         txtUsernamePhonenumber = findViewById(R.id.txtUsernamePhoneNumber);
         edtUsernamePhonenumber = findViewById(R.id.edtUsernamePhoneNumber);
