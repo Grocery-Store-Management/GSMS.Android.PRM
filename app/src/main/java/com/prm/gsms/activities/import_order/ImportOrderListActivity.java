@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.prm.gsms.R;
+import com.prm.gsms.activities.import_order.create.CreateImportOrderActivity;
 import com.prm.gsms.activities.login.DashboardActivity;
 import com.prm.gsms.adapters.ImportOrderAdapter;
 import com.prm.gsms.dtos.ImportOrder;
@@ -90,6 +91,11 @@ public class ImportOrderListActivity extends AppCompatActivity {
     public void clickToBackToDashboardIO(View view) {
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.putExtra("type", "employee");
+        startActivity(intent);
+    }
+
+    public void clickToCreateNewImportOrder(View view) {
+        Intent intent = new Intent(this, CreateImportOrderActivity.class);
         startActivity(intent);
     }
 }

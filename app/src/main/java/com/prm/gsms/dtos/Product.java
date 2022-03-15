@@ -11,6 +11,19 @@ public class Product implements Serializable {
     private BigDecimal price;
     private Timestamp expiringDate;
     private int storedQuantity;
+    private Category category;
+
+    public Product(String id, String name, String categoryId, boolean isDeleted, int status, BigDecimal price, Timestamp expiringDate, int storedQuantity, Category category) {
+        this.id = id;
+        this.name = name;
+        this.categoryId = categoryId;
+        this.isDeleted = isDeleted;
+        this.status = status;
+        this.price = price;
+        this.expiringDate = expiringDate;
+        this.storedQuantity = storedQuantity;
+        this.category = category;
+    }
 
     public Product(String id, String name, String categoryId, boolean isDeleted, int status, BigDecimal price, Timestamp expiringDate, int storedQuantity) {
         this.id = id;
@@ -21,6 +34,14 @@ public class Product implements Serializable {
         this.price = price;
         this.expiringDate = expiringDate;
         this.storedQuantity = storedQuantity;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getId() {
@@ -64,7 +85,7 @@ public class Product implements Serializable {
     }
 
     public BigDecimal getPrice() {
-        return price;
+        return price.setScale(1, BigDecimal.ROUND_HALF_EVEN);
     }
 
     public void setPrice(BigDecimal price) {

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "932248829437",
+    "firebase_url": "https://gsms-prn-default-rtdb.firebaseio.com",
+    "project_id": "gsms-prn",
+    "storage_bucket": "gsms-prn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932248829437:android:ac190bc6567bc23cb9ed94",
+        "android_client_info": {
+          "package_name": "com.prm.gsms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932248829437-kb8p4g1ol9dvemdf216cffdg3en99r58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3kCjSNJnQiUseMsaGRkwJUgsPF-3U_Bw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932248829437-kb8p4g1ol9dvemdf216cffdg3en99r58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

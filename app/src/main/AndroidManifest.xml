@@ -4,12 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
 
     <application
         android:allowBackup="true"
@@ -18,10 +20,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GSMS">
+        <service
+            android:exported="true"
+            android:name=".services.CustomFirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name=".activities.import_order.create.CartActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.report.ReportActivity"
             android:exported="false"
             android:parentActivityName=".activities.login.DashboardActivity"/>
+        <activity
+            android:name=".activities.import_order.create.CreateImportOrderActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.import_order.ImportOrderDetailsActivity"
             android:exported="false"

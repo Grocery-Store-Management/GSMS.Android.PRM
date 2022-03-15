@@ -1,57 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    tools:context=".activities.import_order.ImportOrderListActivity">
+    tools:context=".activities.import_order.create.CreateImportOrderActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Import Orders List"
+        android:text="Create Import Order"
         android:textStyle="bold"
         android:textSize="20dp"
         android:gravity="center" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:paddingBottom="10dp"
-        android:paddingTop="5dp"
-        android:id="@+id/txtCountIO" />
+        android:text="Choose a product to add to the order" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/importOrderList" />
-    </LinearLayout>
+        android:paddingTop="10dp"
+        android:id="@+id/productIOList" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCountCart"
+            android:paddingLeft="10dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Cart"
+            android:onClick="clickToViewCart"
+            />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back to Dashboard"
-            android:layout_marginRight="10dp"
             android:onClick="clickToBackToDashboardIO"
             />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create new Import Order"
-            android:layout_marginRight="10dp"
-            android:onClick="clickToCreateNewImportOrder"
-            />
+
     </LinearLayout>
 </LinearLayout>
