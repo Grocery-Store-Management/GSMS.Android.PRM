@@ -89,14 +89,13 @@ public class ReportActivity extends AppCompatActivity {
 
     public void createPieChart(PieChart chart) {
         ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(300,"Electricity"));
-        data.add(new PieEntry(200,"Drink"));
-        data.add(new PieEntry(600,"Food"));
-        data.add(new PieEntry(280,"J97"));
-        data.add(new PieEntry(900,"Jack Nguyen"));
+        data.add(new PieEntry(300,"Điện tử"));
+        data.add(new PieEntry(200,"Đồ ăn cá nhân"));
+        data.add(new PieEntry(600,"Đồ dùng ngọt"));
+        data.add(new PieEntry(280,"Đồ dùng học tập"));
 
         // **********
-        PieDataSet pieDataSet = new PieDataSet(data, "Visitors");
+        PieDataSet pieDataSet = new PieDataSet(data, "Categories");
         pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         pieDataSet.setValueTextColor(Color.BLACK);
         pieDataSet.setValueTextSize(16f);
@@ -137,7 +136,7 @@ public class ReportActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    public void clickToBackToDashboardIO(View view) {
+    public void clickToBackToDashboardEmp(View view) {
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.putExtra("type", "employee");
         startActivity(intent);
