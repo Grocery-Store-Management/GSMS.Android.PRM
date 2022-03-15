@@ -67,30 +67,18 @@ public class CustomerActivity extends AppCompatActivity {
 
         txtWelcome = findViewById(R.id.txtWelcome);
         txtCurrentPoints = findViewById(R.id.txtCurrentPoints);
-                try {
-                    customerId = GsmsUtils.getCurrentUserId(CustomerActivity.this);
-                    GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
-                        @Override
-                        public void onSuccess(String result) {
-                            curCustomer = CustomerService.getCustomerInfoById(result);
-                            txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
-                            txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
-                            try {
-                                if (codeScanner == null) {
-                                    setupPermissions();
-                                    codeScanner();
-                                }
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }finally {
-                                progressDialog.dismiss();
-                            }
-                        }
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
+        try {
+            customerId = GsmsUtils.getCurrentUserId(CustomerActivity.this);
+            GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    curCustomer = CustomerService.getCustomerInfoById(result);
+                    txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
+                    txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
+                    try {
+                        if (codeScanner == null) {
+                            setupPermissions();
+                            codeScanner();
                         }
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -106,11 +94,12 @@ public class CustomerActivity extends AppCompatActivity {
                     error.printStackTrace();
                 }
             });
-
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+            progressDialog.dismiss();
         }
     }
 
