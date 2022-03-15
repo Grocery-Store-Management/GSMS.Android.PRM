@@ -12,6 +12,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,6 +20,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GSMS">
+        <service
+            android:exported="true"
+            android:name=".services.CustomFirebaseMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".activities.import_order.create.CartActivity"
             android:exported="false" />

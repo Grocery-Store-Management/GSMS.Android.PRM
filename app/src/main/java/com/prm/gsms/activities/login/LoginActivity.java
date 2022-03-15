@@ -11,8 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.prm.gsms.R;
 import com.prm.gsms.activities.MainActivity;
+import com.prm.gsms.services.CustomFirebaseMessagingService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,6 +23,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
+            GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this);
+        }
+
+        String tok = CustomFirebaseMessagingService.getToken(this);
+        Log.d("Asd", tok);
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(this.WIFI_SERVICE);
         if (!wifi.isWifiEnabled()) {
             wifi.setWifiEnabled(true);

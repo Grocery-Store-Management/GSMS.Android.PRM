@@ -5,9 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.preference.EditTextPreference;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -32,7 +39,14 @@ import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CustomerActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -43,6 +57,9 @@ public class CustomerActivity extends AppCompatActivity {
     private TextView txtWelcome;
     private TextView txtCurrentPoints;
     private ProgressDialog progressDialog;
+
+    Socket clientSocket;
+    PrintWriter out;
 
     private void refreshData() {
 
@@ -75,15 +92,27 @@ public class CustomerActivity extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
                         }
-                    });
-
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } finally {
+                        progressDialog.dismiss();
+                    }
                 }
-    }
 
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +120,16 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer);
     }
 
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private void codeScanner() throws UnsupportedEncodingException, JSONException {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         codeScanner = new CodeScanner(this, findViewById(R.id.scanner_view));
         codeScanner.setCamera(CodeScanner.CAMERA_BACK);
         codeScanner.setFormats(CodeScanner.ALL_FORMATS);
@@ -107,7 +145,20 @@ public class CustomerActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            String data = result.getText();
+                            String res = result.getText();
+                            String ip = res.substring(0, res.lastIndexOf("$"));
+                            Log.d("ip", ip);
+                            try {
+                                Socket clientSocket = new Socket();
+                                clientSocket.connect(new InetSocketAddress(ip, 11000), 5000);
+                                if (clientSocket != null) {
+                                    out = new PrintWriter(clientSocket.getOutputStream(), true);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            String data = res.substring(res.lastIndexOf("$") + 1, res.lastIndexOf("}") + 1);
                             int idIndex = data.indexOf("\"id\":");
                             String beg = data.substring(0, idIndex + 5);
                             String end = data.substring(idIndex + 5);
@@ -115,11 +166,11 @@ public class CustomerActivity extends AppCompatActivity {
 
                             int pointIndex = realData.indexOf("\"point\":\"");
                             String addPoints = realData.substring(pointIndex + 9, realData.lastIndexOf("\""));
-                            try{
-                            String totalPoints = String.valueOf(Integer.parseInt(curCustomer.getPoint()) + Integer.parseInt(addPoints));
+                            try {
+                                String totalPoints = String.valueOf(Integer.parseInt(curCustomer.getPoint()) + Integer.parseInt(addPoints));
                                 beg = realData.substring(0, pointIndex + 9);
                                 realData = beg + totalPoints + "\"}";
-                            }catch (NumberFormatException ex){
+                            } catch (NumberFormatException ex) {
                                 ex.printStackTrace();
                                 TextView txtError = findViewById(R.id.txtError);
                                 txtError.setText("An error occurred! Please try again!");
@@ -129,6 +180,9 @@ public class CustomerActivity extends AppCompatActivity {
                             GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.PUT, "customers/" + customerId, realData, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
+                                    if (out != null) {
+                                        out.println("OK");
+                                    }
                                     Toast.makeText(CustomerActivity.this,
                                             "Points updated successfully!!", Toast.LENGTH_SHORT).show();
                                     refreshData();
