@@ -239,7 +239,7 @@ public class GsmsUtils {
         queue.add(jsonObjectRequest);
     }
 
-    public static String getCurrentCustomerId(Context context) throws UnsupportedEncodingException, JSONException {
+    public static String getCurrentUserId(Context context) throws UnsupportedEncodingException, JSONException {
         SharedPreferences loginPreferences = context.getSharedPreferences("LoginPreferences", context.getApplicationContext().MODE_PRIVATE);
         String token = loginPreferences.getString("token", null);
         token = token.substring(token.indexOf(".") + 1, token.lastIndexOf("."));

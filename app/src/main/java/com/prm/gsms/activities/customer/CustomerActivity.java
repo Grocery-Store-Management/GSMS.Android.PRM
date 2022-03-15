@@ -6,18 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -28,7 +23,6 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
-import com.google.gson.Gson;
 import com.google.zxing.Result;
 import com.prm.gsms.R;
 import com.prm.gsms.dtos.Customer;
@@ -37,12 +31,8 @@ import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CustomerActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
@@ -61,7 +51,7 @@ public class CustomerActivity extends AppCompatActivity {
         txtWelcome = findViewById(R.id.txtWelcome);
         txtCurrentPoints = findViewById(R.id.txtCurrentPoints);
                 try {
-                    customerId = GsmsUtils.getCurrentCustomerId(CustomerActivity.this);
+                    customerId = GsmsUtils.getCurrentUserId(CustomerActivity.this);
                     GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
                         @Override
                         public void onSuccess(String result) {

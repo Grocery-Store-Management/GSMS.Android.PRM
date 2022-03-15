@@ -1,18 +1,11 @@
 package com.prm.gsms.activities.customer;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,21 +14,12 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.prm.gsms.R;
-import com.prm.gsms.activities.import_order.ImportOrderDetailsActivity;
 import com.prm.gsms.dtos.Customer;
 import com.prm.gsms.services.CustomerService;
 import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 
 public class CustomerPreferenceActivity extends PreferenceActivity
@@ -51,7 +35,7 @@ public class CustomerPreferenceActivity extends PreferenceActivity
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            String customerId = GsmsUtils.getCurrentCustomerId(this);
+            String customerId = GsmsUtils.getCurrentUserId(this);
             addPreferencesFromResource(R.xml.customerpreference);
             SharedPreferences sharedPrefs = getSharedPreferences("com.prm.gsms_customer_preferences", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefs.edit();
