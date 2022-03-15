@@ -7,7 +7,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,11 +17,9 @@ import android.preference.EditTextPreference;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -33,7 +30,6 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
-import com.google.gson.Gson;
 import com.google.zxing.Result;
 import com.prm.gsms.R;
 import com.prm.gsms.dtos.Customer;
@@ -42,7 +38,6 @@ import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,18 +67,30 @@ public class CustomerActivity extends AppCompatActivity {
 
         txtWelcome = findViewById(R.id.txtWelcome);
         txtCurrentPoints = findViewById(R.id.txtCurrentPoints);
-        try {
-            customerId = GsmsUtils.getCurrentCustomerId(CustomerActivity.this);
-            GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    curCustomer = CustomerService.getCustomerInfoById(result);
-                    txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
-                    txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
-                    try {
-                        if (codeScanner == null) {
-                            setupPermissions();
-                            codeScanner();
+                try {
+                    customerId = GsmsUtils.getCurrentUserId(CustomerActivity.this);
+                    GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.GET, "customers/" + customerId, "", new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            curCustomer = CustomerService.getCustomerInfoById(result);
+                            txtWelcome.setText("Welcome: " + curCustomer.getPhoneNumber());
+                            txtCurrentPoints.setText("Total points accumulated: " + curCustomer.getPoint());
+                            try {
+                                if (codeScanner == null) {
+                                    setupPermissions();
+                                    codeScanner();
+                                }
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }finally {
+                                progressDialog.dismiss();
+                            }
+                        }
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
                         }
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
