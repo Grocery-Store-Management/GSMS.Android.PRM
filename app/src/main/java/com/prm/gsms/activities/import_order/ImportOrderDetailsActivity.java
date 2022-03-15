@@ -88,7 +88,7 @@ public class ImportOrderDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Cancel Import Order
-                ProgressDialog progressDialog = GsmsUtils.showLoading(ImportOrderDetailsActivity.this,"Getting Import Orders...");
+                ProgressDialog progressDialog = GsmsUtils.showLoading(ImportOrderDetailsActivity.this,"Canceling Import Orders...");
                 try {
                     importOrder.setDeleted(true);
                     GsmsUtils.apiUtils(ImportOrderDetailsActivity.this,

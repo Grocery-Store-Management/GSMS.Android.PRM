@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/activity_cart.xml" value="0.17391304347826086" />
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/cart_place_order_store.xml" value="0.1" />
+        <entry key="..\:/FPTU/PhongNT-FPTU-Learning-Resources/2022_Semester7_SPRING/PRM392/Code_Project/GSMS/app/src/main/res/layout/import_order_create_name.xml" value="0.1" />
       </map>
     </option>
   </component>

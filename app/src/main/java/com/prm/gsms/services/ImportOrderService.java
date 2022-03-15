@@ -34,6 +34,36 @@ public class ImportOrderService {
         return gson.toJson(importOrder);
     }
 
+    public static List<ImportOrderCartItem> addToCart(List<ImportOrderCartItem> cart, ImportOrderCartItem item) {
+        ImportOrderCartItem existedItem = null;
+        int position = -1;
+        for (ImportOrderCartItem cartItem :
+                cart) {
+            position++;
+            if (cartItem.getId().equals(item.getId()) && cartItem.getDistributor().equals(item.getDistributor())) {
+                existedItem = cartItem;
+                existedItem.setOrderQuantity(cartItem.getOrderQuantity() + item.getOrderQuantity());
+                break;
+            }
+        }
+        if (existedItem != null) {
+            cart.set(position, existedItem);
+        } else {
+            cart.add(item);
+        }
+        return cart;
+    }
+
+    public static List<ImportOrderCartItem> removeFromCart(List<ImportOrderCartItem> cart, String productId, String distributor) {
+        for (int i = 0; i < cart.size(); i++) {
+            ImportOrderCartItem cartItem = cart.get(i);
+            if (cartItem.getId().equals(productId) && cartItem.getDistributor().equals(distributor)) {
+                cart.remove(cartItem);
+            }
+        }
+        return cart;
+    }
+
     public static List<ImportOrderCartItem> getCart(Context context) throws Exception {
         List<ImportOrderCartItem> products = null;
         String s = null;

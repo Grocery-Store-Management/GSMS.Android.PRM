@@ -54,6 +54,9 @@ public class ImportOrderDetail implements Serializable {
     }
 
     public String getDistributor() {
+        if (distributor == null){
+            return "";
+        }
         return distributor;
     }
 

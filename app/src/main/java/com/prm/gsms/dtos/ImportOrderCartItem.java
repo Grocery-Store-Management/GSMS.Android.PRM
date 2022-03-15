@@ -34,6 +34,9 @@ public class ImportOrderCartItem extends Product {
     }
 
     public String getDistributor() {
+        if (distributor == null) {
+            return "";
+        }
         return distributor;
     }
 

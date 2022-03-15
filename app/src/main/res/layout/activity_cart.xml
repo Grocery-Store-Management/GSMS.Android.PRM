@@ -34,6 +34,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cartItemList" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Click on an item to remove it from the order..."
+            android:textStyle="italic" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

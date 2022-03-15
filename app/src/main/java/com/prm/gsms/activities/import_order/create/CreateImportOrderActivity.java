@@ -43,6 +43,8 @@ public class CreateImportOrderActivity extends AppCompatActivity {
 
     private List<ImportOrderCartItem> cart;
 
+    private TextView txtCountCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,7 @@ public class CreateImportOrderActivity extends AppCompatActivity {
     }
 
     private void loadCart() {
-        TextView txtCountCart = findViewById(R.id.txtCountCart);
+        txtCountCart = findViewById(R.id.txtCountCart);
         try {
             File file = getBaseContext().getFileStreamPath(ImportOrderService.CART_FILE_NAME);
             if (!file.exists()) {
@@ -111,14 +113,34 @@ public class CreateImportOrderActivity extends AppCompatActivity {
                                             try {
                                                 EditText edtAddProductQuantity = viewInflated.findViewById(R.id.edtAddProductQuantity);
                                                 EditText edtAddProductDistributor = viewInflated.findViewById(R.id.edtAddProductDistributor);
+                                                if (edtAddProductQuantity.getText().toString().isEmpty()
+                                                    || Integer.parseInt(edtAddProductQuantity.getText().toString()) <= 0
+                                                ) {
+                                                    AlertDialog dialog = new AlertDialog.Builder(CreateImportOrderActivity.this)
+                                                            .setTitle("Invalid Product Quantity")
+                                                            .setMessage("Quantity must be a positive number!!")
+                                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                                    dialogInterface.cancel();
+                                                                }
+                                                            })
+                                                            .show();
+                                                    return;
+                                                }
+
                                                 ImportOrderCartItem item = new ImportOrderCartItem(
                                                         product,
                                                         Integer.parseInt(edtAddProductQuantity.getText().toString()),
-                                                        edtAddProductDistributor.getText().toString());
-                                                cart.add(item);
+                                                        edtAddProductDistributor.getText().toString() != null
+                                                        ? edtAddProductDistributor.getText().toString()
+                                                        : "");
+
+                                                cart = ImportOrderService.addToCart(cart, item);
                                                 ImportOrderService.saveToCart(CreateImportOrderActivity.this, cart);
                                                 dialogInterface.dismiss();
                                                 Toast.makeText(CreateImportOrderActivity.this, "Add to Import Order successfully", Toast.LENGTH_SHORT).show();
+                                                txtCountCart.setText("Cart items: " + cart.size());
                                             } catch (Exception ex){
                                                 ex.printStackTrace();
                                             }
