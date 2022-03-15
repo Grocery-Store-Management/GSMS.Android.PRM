@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -141,7 +142,8 @@ public class CustomerActivity extends AppCompatActivity {
                             String ip = res.substring(0, res.lastIndexOf("$"));
                             Log.d("ip", ip);
                             try {
-                                clientSocket = new Socket(ip, 11000);
+                                Socket clientSocket = new Socket();
+                                clientSocket.connect(new InetSocketAddress(ip, 11000), 5000);
                                 if (clientSocket != null) {
                                     out = new PrintWriter(clientSocket.getOutputStream(), true);
                                 }
@@ -171,7 +173,9 @@ public class CustomerActivity extends AppCompatActivity {
                             GsmsUtils.apiUtils(CustomerActivity.this, Request.Method.PUT, "customers/" + customerId, realData, new VolleyCallback() {
                                 @Override
                                 public void onSuccess(String result) {
-                                    out.println("OK");
+                                    if (out != null) {
+                                        out.println("OK");
+                                    }
                                     Toast.makeText(CustomerActivity.this,
                                             "Points updated successfully!!", Toast.LENGTH_SHORT).show();
                                     refreshData();
