@@ -89,7 +89,6 @@ public class ReportActivity extends AppCompatActivity {
         ArrayList<BarEntry> data = new ArrayList<>();
         Map<String, Integer> quantityMap = new HashMap<>();
         int count = 0;
-        /*
         for (ReceiptDetail r: list) {
             boolean hasKey = false;
             for (String key : quantityMap.keySet()) {
@@ -104,9 +103,8 @@ public class ReportActivity extends AppCompatActivity {
                 quantityMap.put(r.getName(), r.getQuantity());
             fullRevenue = fullRevenue.add(BigDecimal.valueOf( r.getQuantity() ).multiply( r.getPrice()));
             count++;
-            data.add(new BarEntry(count, r.getQuantity(), r.getName()));
+            //data.add(new BarEntry(count, r.getQuantity(), r.getName()));
         }
-        */
 
         txtRevenue.setText("Tổng lợi nhuận: " + fullRevenue);
             data.add(new BarEntry(1, 42300, list.get(1).getName()));
