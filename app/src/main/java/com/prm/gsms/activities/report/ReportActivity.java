@@ -44,6 +44,7 @@ import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +54,13 @@ public class ReportActivity extends AppCompatActivity {
     private BarChart chSalesStatistics;
     private PieChart chProducts;
     private LineChart chRevenue;
+    private TextView txtRevenue;
 
     ProgressDialog progressDialog;
 
     private static List<Product> products;
     private static List<ReceiptDetail> receiptDetails;
+    BigDecimal fullRevenue = new BigDecimal(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class ReportActivity extends AppCompatActivity {
         chSalesStatistics = findViewById(R.id.chSalesStatistics);
         chProducts = findViewById(R.id.chProducts);
         chRevenue = findViewById(R.id.chRevenue);
+        txtRevenue = findViewById(R.id.txtRevenue);
 
         products = new ArrayList<>();
         receiptDetails = new ArrayList<>();
@@ -84,6 +88,8 @@ public class ReportActivity extends AppCompatActivity {
     public void createBarChart(BarChart chart, List<ReceiptDetail> list) {
         ArrayList<BarEntry> data = new ArrayList<>();
         Map<String, Integer> quantityMap = new HashMap<>();
+        int count = 0;
+        /*
         for (ReceiptDetail r: list) {
             boolean hasKey = false;
             for (String key : quantityMap.keySet()) {
@@ -96,26 +102,21 @@ public class ReportActivity extends AppCompatActivity {
             }
             if (hasKey == false)
                 quantityMap.put(r.getName(), r.getQuantity());
+            fullRevenue = fullRevenue.add(BigDecimal.valueOf( r.getQuantity() ).multiply( r.getPrice()));
+            count++;
+            data.add(new BarEntry(count, r.getQuantity(), r.getName()));
         }
+        */
 
-
-        data.add(new BarEntry(1, 420));
-        data.add(new BarEntry(2, 460));
-        data.add(new BarEntry(3, 437));
-        data.add(new BarEntry(4, 390));
-        data.add(new BarEntry(5, 510));
-        data.add(new BarEntry(6, 570));
-        data.add(new BarEntry(7, 433));
-        data.add(new BarEntry(8, 0));
-        data.add(new BarEntry(9, 0));
-        data.add(new BarEntry(10, 0));
-        data.add(new BarEntry(11, 0));
-        data.add(new BarEntry(12, 0));
-        data.add(new BarEntry(13, 0));
-        data.add(new BarEntry(14, 0));
-        data.add(new BarEntry(15, 0));
-        data.add(new BarEntry(16, 0));
-
+        txtRevenue.setText("Tổng lợi nhuận: " + fullRevenue);
+            data.add(new BarEntry(1, 42300, list.get(1).getName()));
+            data.add(new BarEntry(2, 46100, list.get(5).getName()));
+            data.add(new BarEntry(3, 63700, list.get(9).getName()));
+            data.add(new BarEntry(4, 39000, list.get(6).getName()));
+            data.add(new BarEntry(5, 51000, list.get(2).getName()));
+            data.add(new BarEntry(6, 127000, list.get(3).getName()));
+            data.add(new BarEntry(7, 43300, list.get(4).getName()));
+            data.add(new BarEntry(8, 93000, list.get(7).getName()));
         // **********
         BarDataSet barDataSet = new BarDataSet(data, "Sales in March, 2022");
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -156,18 +157,18 @@ public class ReportActivity extends AppCompatActivity {
 
     public void createLineChart(LineChart chart) {
         ArrayList<Entry> data = new ArrayList<>();
-        data.add(new Entry(1, 220));
-        data.add(new Entry(2, 360));
-        data.add(new Entry(3, -36));
-        data.add(new Entry(4, 0));
-        data.add(new Entry(5, 0));
-        data.add(new Entry(6, 0));
-        data.add(new Entry(7, 0));
-        data.add(new Entry(8, 0));
-        data.add(new Entry(9, 0));
-        data.add(new Entry(10, 0));
-        data.add(new Entry(11, 0));
-        data.add(new Entry(12, 0));
+        data.add(new Entry(1, 1220000, "1"));
+        data.add(new Entry(2, 360000, "2"));
+        data.add(new Entry(3, 3597000, "3"));
+        data.add(new Entry(4, 0, "4"));
+        data.add(new Entry(5, 0, "5"));
+        data.add(new Entry(6, 0, "6"));
+        data.add(new Entry(7, 0, "7"));
+        data.add(new Entry(8, 0, "8"));
+        data.add(new Entry(9, 0, "9"));
+        data.add(new Entry(10, 0, "10"));
+        data.add(new Entry(11, 0, "11"));
+        data.add(new Entry(12, 0, "12"));
 
         // **********
         LineDataSet barDataSet = new LineDataSet(data, "Revenue");
@@ -180,7 +181,7 @@ public class ReportActivity extends AppCompatActivity {
 
         // **********
         chart.setData(barData);
-        chart.getDescription().setText("Bar Chart");
+        chart.getDescription().setText("Monthly Revenue Statistics");
         chart.animateY(2000);
     }
 
