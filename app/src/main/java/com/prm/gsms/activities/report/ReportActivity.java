@@ -33,18 +33,32 @@ import com.prm.gsms.activities.import_order.ImportOrderDetailsActivity;
 import com.prm.gsms.activities.import_order.ImportOrderListActivity;
 import com.prm.gsms.activities.login.DashboardActivity;
 import com.prm.gsms.adapters.ImportOrderAdapter;
+import com.prm.gsms.adapters.ReportAdapter;
 import com.prm.gsms.dtos.ImportOrder;
+import com.prm.gsms.dtos.Product;
+import com.prm.gsms.dtos.ReceiptDetail;
 import com.prm.gsms.services.ImportOrderService;
+import com.prm.gsms.services.ProductService;
+import com.prm.gsms.services.ReceiptService;
 import com.prm.gsms.utils.GsmsUtils;
 import com.prm.gsms.utils.VolleyCallback;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReportActivity extends AppCompatActivity {
     private BarChart chSalesStatistics;
     private PieChart chProducts;
     private LineChart chRevenue;
+
+    ProgressDialog progressDialog;
+
+    private static List<Product> products;
+    private static List<ReceiptDetail> receiptDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,24 +70,55 @@ public class ReportActivity extends AppCompatActivity {
         chProducts = findViewById(R.id.chProducts);
         chRevenue = findViewById(R.id.chRevenue);
 
-        createBarChart(chSalesStatistics);
-        createPieChart(chProducts);
+        products = new ArrayList<>();
+        receiptDetails = new ArrayList<>();
+
+        progressDialog = GsmsUtils.showLoading(this,"Getting Report Data...");
+
+        loadProducts();
+        loadSales();
+
         createLineChart(chRevenue);
     }
 
-    public void createBarChart(BarChart chart) {
+    public void createBarChart(BarChart chart, List<ReceiptDetail> list) {
         ArrayList<BarEntry> data = new ArrayList<>();
-        data.add(new BarEntry(2014, 420));
-        data.add(new BarEntry(2015, 460));
-        data.add(new BarEntry(2016, 437));
-        data.add(new BarEntry(2017, 390));
-        data.add(new BarEntry(2018, 510));
-        data.add(new BarEntry(2019, 670));
-        data.add(new BarEntry(2020, 633));
+        Map<String, Integer> quantityMap = new HashMap<>();
+        for (ReceiptDetail r: list) {
+            boolean hasKey = false;
+            for (String key : quantityMap.keySet()) {
+                if (r.getName() == key) {
+                    Integer i = quantityMap.get(key);
+                    quantityMap.put(key, i + r.getQuantity());
+                    hasKey = true;
+                    break;
+                }
+            }
+            if (hasKey == false)
+                quantityMap.put(r.getName(), r.getQuantity());
+        }
+
+
+        data.add(new BarEntry(1, 420));
+        data.add(new BarEntry(2, 460));
+        data.add(new BarEntry(3, 437));
+        data.add(new BarEntry(4, 390));
+        data.add(new BarEntry(5, 510));
+        data.add(new BarEntry(6, 570));
+        data.add(new BarEntry(7, 433));
+        data.add(new BarEntry(8, 0));
+        data.add(new BarEntry(9, 0));
+        data.add(new BarEntry(10, 0));
+        data.add(new BarEntry(11, 0));
+        data.add(new BarEntry(12, 0));
+        data.add(new BarEntry(13, 0));
+        data.add(new BarEntry(14, 0));
+        data.add(new BarEntry(15, 0));
+        data.add(new BarEntry(16, 0));
 
         // **********
-        BarDataSet barDataSet = new BarDataSet(data, "Visitors");
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        BarDataSet barDataSet = new BarDataSet(data, "Sales in March, 2022");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);
 
@@ -83,20 +128,17 @@ public class ReportActivity extends AppCompatActivity {
         // **********
         chart.setFitBars(true);
         chart.setData(barData);
-        chart.getDescription().setText("Bar Chart");
+        chart.getDescription().setText("Sales Statistics");
         chart.animateY(2000);
     }
 
-    public void createPieChart(PieChart chart) {
+    public void createPieChart(PieChart chart, List<Product> list) {
         ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(300,"Electricity"));
-        data.add(new PieEntry(200,"Drink"));
-        data.add(new PieEntry(600,"Food"));
-        data.add(new PieEntry(280,"J97"));
-        data.add(new PieEntry(900,"Jack Nguyen"));
-
+        for (Product p: list) {
+            data.add(new PieEntry(p.getStoredQuantity(),p.getCategory().getName()));
+        }
         // **********
-        PieDataSet pieDataSet = new PieDataSet(data, "Visitors");
+        PieDataSet pieDataSet = new PieDataSet(data, "Categories");
         pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         pieDataSet.setValueTextColor(Color.BLACK);
         pieDataSet.setValueTextSize(16f);
@@ -108,22 +150,27 @@ public class ReportActivity extends AppCompatActivity {
 //        chart.setCenterText("");
         chart.setData(pieData);
         chart.getDescription().setEnabled(true);
-        chart.getDescription().setText("Pie Chart");
+        chart.getDescription().setText("Products in Store Statistics");
         chart.animateY(2000);
     }
 
     public void createLineChart(LineChart chart) {
         ArrayList<Entry> data = new ArrayList<>();
-        data.add(new Entry(2014, 420));
-        data.add(new Entry(2015, 460));
-        data.add(new Entry(2016, 437));
-        data.add(new Entry(2017, 390));
-        data.add(new Entry(2018, 510));
-        data.add(new Entry(2019, 670));
-        data.add(new Entry(2020, 633));
+        data.add(new Entry(1, 220));
+        data.add(new Entry(2, 360));
+        data.add(new Entry(3, -36));
+        data.add(new Entry(4, 0));
+        data.add(new Entry(5, 0));
+        data.add(new Entry(6, 0));
+        data.add(new Entry(7, 0));
+        data.add(new Entry(8, 0));
+        data.add(new Entry(9, 0));
+        data.add(new Entry(10, 0));
+        data.add(new Entry(11, 0));
+        data.add(new Entry(12, 0));
 
         // **********
-        LineDataSet barDataSet = new LineDataSet(data, "Visitors");
+        LineDataSet barDataSet = new LineDataSet(data, "Revenue");
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);
@@ -137,46 +184,55 @@ public class ReportActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    public void clickToBackToDashboardIO(View view) {
+    public void clickToBackToDashboardEmp(View view) {
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.putExtra("type", "employee");
         startActivity(intent);
     }
-/*
-    private static List<ImportOrder> importOrders = null;
-    // ListView
-    private ListView importOrderListView;
-    // ListView Adapter
-    private ImportOrderAdapter importOrderAdapter;
 
-    private void loadImportOrderList(){
-        importOrderListView = (ListView) findViewById(R.id.importOrderList);
-        importOrderAdapter = new ImportOrderAdapter();
-
-        TextView txtCountIO = (TextView) findViewById(R.id.txtCountIO);
-        ProgressDialog progressDialog = GsmsUtils.showLoading(this,"Getting Import Orders...");
+    private void loadSales() {
         try {
             GsmsUtils.apiUtils(this,
                     Request.Method.GET,
-                    "import-orders" ,
+                    "receipt-details" ,
                     "",
                     new VolleyCallback() {
                         @Override
                         public void onSuccess(String result) {
-                            importOrders = ImportOrderService.getImportOrders(result);
-                            txtCountIO.setText("Number of Import Orders: " + importOrders.size() + " orders");
-                            importOrderAdapter.setImportOrderList(importOrders);
-                            importOrderListView.setAdapter(importOrderAdapter);
-                            importOrderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    ImportOrder importOrder = (ImportOrder) importOrderListView.getItemAtPosition(i);
-                                    Intent intent = new Intent(ReportActivity.this, ImportOrderDetailsActivity.class);
-                                    intent.putExtra("importOrder", importOrder);
-                                    startActivity(intent);
-                                }
-                            });
+                            receiptDetails = ReceiptService.getReceipts(result);
+                            createBarChart(chSalesStatistics, receiptDetails);
+
                             progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError error){
+                            Toast.makeText(ReportActivity.this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
+                            error.printStackTrace();
+
+                            progressDialog.dismiss();
+                        }
+                    });
+        } catch (Exception ex){
+            Toast.makeText(this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
+            ex.printStackTrace();
+
+            progressDialog.dismiss();
+        }
+    }
+
+    private void loadProducts() {
+        try {
+            GsmsUtils.apiUtils(this,
+                    Request.Method.GET,
+                    "products" ,
+                    "",
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            products = ProductService.getProducts(result);
+                            createPieChart(chProducts, products);
+
                         }
 
                         @Override
@@ -192,5 +248,5 @@ public class ReportActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-*/
+
 }

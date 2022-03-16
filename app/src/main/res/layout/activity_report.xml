@@ -10,14 +10,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="10dp"
+    android:padding="20dp"
     tools:context=".activities.report.ReportActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20dp"
-        android:text="Store Report"/>
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:text="Store's Report"/>
         <com.github.mikephil.charting.charts.BarChart
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"
@@ -33,5 +35,11 @@
             android:layout_marginTop="20dp"
             android:layout_height="360dp"
             android:id="@+id/chRevenue"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back to Dashboard"
+        android:layout_marginTop="20dp"
+        android:onClick="clickToBackToDashboardEmp"/>
 </LinearLayout>
 </ScrollView>
