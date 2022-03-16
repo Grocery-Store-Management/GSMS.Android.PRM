@@ -201,17 +201,23 @@ public class ReportActivity extends AppCompatActivity {
                         public void onSuccess(String result) {
                             receiptDetails = ReceiptService.getReceipts(result);
                             createBarChart(chSalesStatistics, receiptDetails);
+
+                            progressDialog.dismiss();
                         }
 
                         @Override
                         public void onErrorResponse(VolleyError error){
                             Toast.makeText(ReportActivity.this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
                             error.printStackTrace();
+
+                            progressDialog.dismiss();
                         }
                     });
         } catch (Exception ex){
             Toast.makeText(this, "An error has occured! Please check the log for more information...", Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
+
+            progressDialog.dismiss();
         }
     }
 
@@ -227,7 +233,6 @@ public class ReportActivity extends AppCompatActivity {
                             products = ProductService.getProducts(result);
                             createPieChart(chProducts, products);
 
-                            progressDialog.dismiss();
                         }
 
                         @Override
