@@ -36,6 +36,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0,100,0,0);
 
         if(type.equals("employee")){
             txtTitle.setText("Employee Dashboard");
@@ -46,6 +47,7 @@ public class DashboardActivity extends AppCompatActivity {
 
             Button btnReport = new Button(this);
             btnReport.setText("Report");
+            params.setMargins(0,20,0,20);
             btnReport.setLayoutParams(params);
 
             linearLayout.addView(btnImportOrder);
